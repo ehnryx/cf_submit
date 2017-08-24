@@ -1,6 +1,6 @@
 # cf-code-submit
 submit code to codeforces from command line <br />
-I was unable to find an existing thing that allowed submissions to the codeforces gym, which is why I made my own.
+I was unable to find an existing thing that allowed submissions to the codeforces gym from the command line, which is why I made my own.
 
 ## Uses
 Set contest or gym ID. Example: `cf con 844` or `cf gym 101482` <br />
