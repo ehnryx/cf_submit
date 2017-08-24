@@ -1,6 +1,6 @@
 # cf-code-submit
 submit code to codeforces from command line <br />
-I was unable to find an existing thing that allowed submissions to the codeforces gym from the command line, which is why I made my own.
+In order to save the huge number of seconds needed to reach for the mouse during a codeforces virtual contest, I needed to be able to submit from the command line. There are many tools to do this for codeforces contests but I was unable to find an existing tool that allowed submissions to the codeforces gym, so I made my own. <br />
 
 ## Uses
 Set contest or gym ID. Example: `cf con 844` or `cf gym 101482` <br />
