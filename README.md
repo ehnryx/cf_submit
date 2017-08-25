@@ -13,3 +13,4 @@ Store login info (username and password), will prompt you to enter password. Exa
 
 ## Dependencies
 robobrowser <br />
+texttable https://github.com/foutaise/texttable <br />
