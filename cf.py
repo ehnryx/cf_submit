@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import sys
 import os
 import argparse
 import re
@@ -7,6 +8,7 @@ from robobrowser import RoboBrowser
 import subprocess
 import cf_login
 import cf_submit
+import cf_standings
 
 """ login """
 def login(handle, password):
@@ -17,7 +19,7 @@ def login(handle, password):
 	enter_form["password"] = password
 	browser.submit_form(enter_form)
 
-	checks = list(map(lambda x: x.getText()[1:].strip(), browser.select('div.caption.titled')))
+	checks = list(map(lambda x: x.getText()[1:].strip(), browser.select("div.caption.titled")))
 	if handle not in checks:
 		print("Login Corrupted.")
 		return None
@@ -74,18 +76,19 @@ def submit(handle, password, contest, problem, lang, source, watch):
 		cf_submit.watch(handle)
 
 """ print standings """
-def print_standings(handle, password, contest):
+def print_standings(handle, password, contest, verbose):
 	# requires login
 	browser = login(handle, password)
-	# get friends
-	friends = requests.get("http://codeforces.com/api/user.friends")
-	requrl = "http://codeforces.com/api/contest.standings?contestId="+contest+"&handles="
-	print("friends: ")
-	for ami in friends:
-		print(ami)
-		requrl += ami+";"
-	req = requests.get(requrl[:-1]+"&showUnofficial=true")
-	print(str(req))
+	if len(str(contest)) >= 6:
+		""" gym contest """
+		browser.open("http://codeforces.com/gym/"+contest+"/standings/friends/true")
+		raw_html = browser.parsed
+	else:
+		""" codeforces round """
+		browser.open("http://codeforces.com/contest/"+contest+"/standings/friends/true")
+		raw_html = browser.parsed
+	cf_standings.print_st(raw_html, verbose)
+
 
 """ main """
 def main():
@@ -102,8 +105,11 @@ def main():
 	parser = argparse.ArgumentParser(description="Command line tool to submit to codeforces", formatter_class=argparse.RawTextHelpFormatter)
 	parser.add_argument("command", help="peek -- look at last submission\n" + "watch -- watch last submission\n" + "con/gym -- change contest or gym id\n" + "login -- save login info\n" + "submit -- submit code to problem\n" + "standings -- show standings of friends in default contest, or specify contest with -p")
 	parser.add_argument("option", nargs='?', default=None, help="file to submit")
-	parser.add_argument("-p", "--prob", action="store", default=None, help="specify problem, example: -p845a")
+	parser.add_argument("-p", "--prob", action="store", default=None, help="specify problem, example: -p 845a")
+	parser.add_argument("-c", "--contest", action="store", default=None, help="specify contest when getting standings")
 	parser.add_argument("-w", "--watch", action="store_true", default=False, help="watch submission status")
+	parser.add_argument("-v", "--verbose", action="store_true", default=False, help="show more when looking at standings")
+	parser.add_argument("-t", "--top", type=int, nargs='?', const=10, default=None, help="number of top contestants to print")
 	args = parser.parse_args()
 
 	if args.command == "gym" or args.command == "con":
@@ -135,11 +141,17 @@ def main():
 
 	elif args.command == "standings":
 		""" look at friends standings """
-		handle, password = cf_login.get_secret(True)
-		if args.prob is None:
-			print_standings(handle, password, defaultcontest)
+		if args.top is None:
+			handle, password = cf_login.get_secret(True)
+			if args.contest is None:
+				print_standings(handle, password, defaultcontest, args.verbose)
+			else:
+				print_standings(handle, password, args.contest, args.verbose)
 		else:
-			print_standings(handle, password, args.prob)
+			if args.contest is None:
+				cf_standings.print_top(defaultcontest, args.top)
+			else:
+				cf_standings.print_top(args.contest, args.top)
 
 	elif args.command == "submit":
 		""" get handle and password """
@@ -185,4 +197,8 @@ def main():
 
 """ END """ 
 if __name__ == "__main__":
-	main()
+	try:
+		main()
+	except KeyboardInterrupt:
+		print("")
+		sys.exit(0)

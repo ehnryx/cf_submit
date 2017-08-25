@@ -8,7 +8,7 @@ def get_submission_data(handle):
 	req = requests.get("http://codeforces.com/api/user.status?handle={}&from=1&count=1".format(handle))
 	content = req.content.decode()
 	js = json.loads(content)
-	if "status" not in js or js['status'] != "OK":
+	if "status" not in js or js["status"] != "OK":
 		print("Connection Error!")
 	res = js["result"][0]
 	# check if verdict exists (in queue if not)
