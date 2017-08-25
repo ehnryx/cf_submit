@@ -18,7 +18,7 @@ Example: `cf submit code.cpp -p844a -w` <br />
 Look at friends' standings of defalut contest. Example: `cf standings` <br />
 Print standings with more info with `-v` or `--verbose`. Example: `cf standings -v` <br />
 Look at top contestants instead of friends with `-t` or `--top`. Examples: `cf standings -t` or `cf standings -t 20` **work in progress** <br />
-`--top` defaults to printing the top 10. <br />
+`-t` and `--top` default to printing the top 10. <br />
 Look at a different contest by specifying the ID with `-c` or `--contest`. Example: `cf standings -c 844` <br />
 Example: `cf standings -v -t7` <br />
 
