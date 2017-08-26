@@ -53,15 +53,35 @@ def print_st(raw_html, verbose, top):
 				rank = rank[rank.find('(')+1:rank.find(')')]
 			tablerow.append(rank)
 		""" get name """
+		""" TODO: check whether virtual or actual
+		separate time for virtual contests """
 		party = str(row[1].get_text(strip=True))
 		if verbose:
-			partyname = []
-			if party.find(':') != -1:
-				party = party.split(':')
-				partyname.append(party[0]+":")
-				for member in party[1].split(','):
-					partyname.append(member)
-				party = '\n'.join(partyname)
+			team = []
+			if party.count(':') == 2:
+				""" split at first colon """
+				team.append(party[:party.find(':')+1])
+				party = party[party.find(':')+1:]
+				""" split rest of team members """
+				for member in party[:-4].split(','):
+					team.append(member)
+				team.append(party[-4:])
+				party = '\n'.join(team)
+			elif party.count(':') == 1:
+				""" check if virtual colon or other """
+				if party.count(',') == 0:
+					""" virtual time colon """
+					party = '\n'.join([party[:-4], party[-4:]])
+				else:
+					""" team name colon """
+					team.append(party[:party.find(':')])
+					if party[-1] == '#':
+						team[-1] += "#"
+						party = party[:-1]
+					team[-1] += ":"
+					for member in party[party.find(':')+1:].split(','):
+						team.append(member)
+					party = '\n'.join(team)
 		else:
 			party = party.split(':')[0]
 		tablerow.append(party)
