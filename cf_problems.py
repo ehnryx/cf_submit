@@ -26,7 +26,3 @@ def print_prob(raw_html, verbose):
 	stats.align["Name"] = "l"
 	print stats
 
-def print_casual(contest, verbose):
-	print "work in progress"
-	print "request: contest="+contest + " verbose="+str(verbose)
-
