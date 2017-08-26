@@ -32,7 +32,6 @@ def print_st(raw_html, verbose, top):
 	for hcell in mellon[0].find_all("a"):
 		header.append(str(hcell.get_text(strip=True)))
 	standings.field_names = header
-	standings.align["Who"] = "l"
 
 	""" get rows """
 	if top is None:
@@ -87,5 +86,9 @@ def print_st(raw_html, verbose, top):
 	""" print standings """
 	if verbose:
 		standings.hrules = True
+		if "Penalty" in standings.align:
+			standings.align["Penalty"] = "r"
+	standings.align["Who"] = "l"
+	standings.align["="] = "r"
 	print standings
 

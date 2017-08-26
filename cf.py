@@ -96,9 +96,11 @@ def print_standings(handle, password, contest, verbose, top):
 def print_problems(handle, password, contest, verbose):
 	browser = login(handle, password)
 	if len(str(contest)) >= 6:
-		browser.open("http://codeforces.com/gym/"+contest)
+		url = "http://codeforces.com/gym/"+contest
 	else:
-		browser.open("http://codeforces.com/contest/"+contest)
+		url = "http://codeforces.com/contest/"+contest
+	""" go to standings if verbose """
+	browser.open(url)
 	cf_problems.print_prob(browser.parsed, verbose)
 
 

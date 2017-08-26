@@ -12,7 +12,10 @@ def print_prob(raw_html, verbose):
 	header = ["#", "Name", "Solves"]
 	stats.field_names = header
 	
-	""" get standings table """
+	if verbose:
+		print "verbose feature is not available"
+
+	""" get problems table """
 	probraw = raw_html.find_all("table", class_="problems")[0].find_all("tr")
 	for row in probraw[1:]:
 		tablerow = []
@@ -24,5 +27,6 @@ def print_prob(raw_html, verbose):
 
 	stats.hrules = True
 	stats.align["Name"] = "l"
+	stats.align["Solves"] = "r"
 	print stats
 
