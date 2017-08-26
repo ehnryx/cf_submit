@@ -110,8 +110,6 @@ def main():
 		contestfile = open("/home/d/d0b1b/Tools/cf_submit/contestid", "r")
 		defaultcontest = contestfile.read().rstrip('\n')
 		contestfile.close()
-	else:
-		print("Cannot find default contest")
 	
 	""" argparse """
 	parser = argparse.ArgumentParser(description="Command line tool to submit to codeforces", formatter_class=argparse.RawTextHelpFormatter)
@@ -122,7 +120,6 @@ def main():
 	parser.add_argument("-w", "--watch", action="store_true", default=False, help="watch submission status")
 	parser.add_argument("-v", "--verbose", action="store_true", default=False, help="show more when looking at standings")
 	parser.add_argument("-t", "--top", type=int, nargs='?', const=10, default=None, help="number of top contestants to print")
-	parser.add_argument("-a", "--casual", action="store_true", default=False, help="use codeforces api because not virtual contest")
 	args = parser.parse_args()
 
 	if args.command == "gym" or args.command == "con":
@@ -154,35 +151,19 @@ def main():
 
 	elif args.command == "standings":
 		""" look at standings """
-		if args.casual:
-			""" must be top """
-			if args.contest is None:
-				cf_standings.print_casual(defaultcontest, args.verbose)
-			else:
-				cf_standings.print_casual(args.contest, args.verbose)
+		handle, password = cf_login.get_secret(True)
+		if args.contest is None:
+			print_standings(handle, password, defaultcontest, args.verbose, args.top)
 		else:
-			""" could be friends """
-			handle, password = cf_login.get_secret(True)
-			if args.contest is None:
-				print_standings(handle, password, defaultcontest, args.verbose, args.top)
-			else:
-				print_standings(handle, password, args.contest, args.verbose, args.top)
+			print_standings(handle, password, args.contest, args.verbose, args.top)
 
 	elif args.command == "problems":
 		""" look at problem stats """
-		if args.casual:
-			""" actual stats """
-			if args.contest is None:
-				cf_problems.print_casual(defaultcontest, args.verbose)
-			else:
-				cf_problems.print_casual(args.contest, args.verbose)
+		handle, password = cf_login.get_secret(True)
+		if args.contest is None: 
+			print_problems(handle, password, defaultcontest, args.verbose)
 		else:
-			""" virtual contest stats """
-			handle, password = cf_login.get_secret(True)
-			if args.contest is None: 
-				print_problems(handle, password, defaultcontest, args.verbose)
-			else:
-				print_problems(handle, password, args.contest, args.verbose)
+			print_problems(handle, password, args.contest, args.verbose)
 
 	elif args.command == "submit":
 		""" get handle and password """

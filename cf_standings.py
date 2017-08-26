@@ -88,7 +88,4 @@ def print_st(raw_html, verbose, top):
 	if verbose:
 		standings.hrules = True
 	print standings
-	
-def print_casual(contest, verbose):
-	print "work in progress"
-	print "request: contest="+contest + " verbose="+str(verbose)
+

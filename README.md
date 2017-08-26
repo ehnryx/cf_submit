@@ -22,7 +22,6 @@ Look at a different contest by specifying the ID with `-c` or `--contest`. Examp
 Print standings or problems with more info with `-v` or `--verbose`. Example: `cf standings -v` <br />
 Look at the standings of top contestants instead of friends with `-t` or `--top`. Examples: `cf standings -t 20` <br />
 If no number is given, `--top` defaults to printing the top 10. <br />
-Look at actual (not virtual contest) standings or stats with `--casual` or `a`. ** work in progress ** <br />
 Examples: `cf standings -v -t7` or `cf standings -c844 -v -a` <br />
 
 ## Dependencies
