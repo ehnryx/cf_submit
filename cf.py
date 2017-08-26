@@ -117,7 +117,7 @@ def main():
 	parser = argparse.ArgumentParser(description="Command line tool to submit to codeforces", formatter_class=argparse.RawTextHelpFormatter)
 	parser.add_argument("command", help=
 			"con/gym -- change contest or gym id\n" + 
-			"current -- current handle and contest id\n" + 
+			"info -- current handle and contest id\n" + 
 			"login -- save login info\n" + 
 			"submit -- submit code to problem\n" + 
 			"peek -- look at last submission\n"	+ 
@@ -146,7 +146,7 @@ def main():
 		else:
 			print("Contest set to " + contest)
 	
-	elif args.command == "current": 
+	elif args.command == "info": 
 		handle = cf_login.get_secret(False)
 		print("handle: " + handle)
 		print("contestID: " + str(defaultcontest))

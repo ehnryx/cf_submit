@@ -14,6 +14,7 @@ Watch the status of submission after submitting it with `-w` or `--watch`. Examp
 Look at status of the last submission. Example: `cf peek` <br />
 Watch the status of the last submission. Example: `cf watch` <br />
 Store login info (username and password), will prompt you to enter password. Example: `cf login` or `cf login henryx` <br />
+Show handle and contest id. Example: `cf info` <br />
 Example: `cf submit code.cpp -p844a -w` <br />
 ## Standings and Problem Stats
 Look at friends' standings of defalut contest. Example: `cf standings` <br />
