@@ -165,7 +165,7 @@ def main():
 	elif args.command == "watch": 
 		cf_submit.watch(cf_login.get_secret(False))
 
-	elif args.command == "standings":
+	elif args.command == "standings" or args.command == "st":
 		""" look at standings """
 		handle, password = cf_login.get_secret(True)
 		if args.contest is None:
@@ -173,7 +173,7 @@ def main():
 		else:
 			print_standings(handle, password, args.contest, args.verbose, args.top)
 
-	elif args.command == "problems":
+	elif args.command == "problems" or args.command == "pb":
 		""" look at problem stats """
 		handle, password = cf_login.get_secret(True)
 		if args.contest is None: 
