@@ -89,6 +89,8 @@ def print_standings(handle, password, contest, verbose, top):
 	""" check if friends """ 
 	if top is None:
 		url += "/friends/true"
+	else:
+		url += "/page/1"
 	browser.open(url)
 	cf_standings.print_st(browser.parsed, verbose, top)
 

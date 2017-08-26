@@ -63,15 +63,15 @@ def print_st(raw_html, verbose, top):
 				team.append(party[:party.find(':')+1])
 				party = party[party.find(':')+1:]
 				""" split rest of team members """
-				for member in party[:-4].split(','):
+				for member in party[:-5].split(','):
 					team.append(member)
-				team.append(party[-4:])
+				team.append(party[-5:])
 				party = '\n'.join(team)
 			elif party.count(':') == 1:
 				""" check if virtual colon or other """
 				if party.count(',') == 0:
 					""" virtual time colon """
-					party = '\n'.join([party[:-4], party[-4:]])
+					party = '\n'.join([party[:-5], party[-5:]])
 				else:
 					""" team name colon """
 					team.append(party[:party.find(':')])
@@ -83,7 +83,17 @@ def print_st(raw_html, verbose, top):
 						team.append(member)
 					party = '\n'.join(team)
 		else:
-			party = party.split(':')[0]
+			""" check type """
+			if party.count(','):
+				""" check for # """
+				tail = ""
+				if party[-1] == '#':
+					tail = "#"
+				party = party.split(':')[0]
+				party += tail
+			elif party.count(':') != 0:
+				party = party[:-5]
+
 		tablerow.append(party)
 		""" get points or number of solves """
 		tablerow.append(str(row[2].get_text(strip=True)))
