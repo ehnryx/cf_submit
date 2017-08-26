@@ -9,6 +9,7 @@ import subprocess
 import cf_login
 import cf_submit
 import cf_standings
+import cf_problems
 
 """ login """
 def login(handle, password):
@@ -76,18 +77,29 @@ def submit(handle, password, contest, problem, lang, source, watch):
 		cf_submit.watch(handle)
 
 """ print standings """
-def print_standings(handle, password, contest, verbose):
+def print_standings(handle, password, contest, verbose, top):
 	# requires login
 	browser = login(handle, password)
 	if len(str(contest)) >= 6:
 		""" gym contest """
-		browser.open("http://codeforces.com/gym/"+contest+"/standings/friends/true")
-		raw_html = browser.parsed
+		url = "http://codeforces.com/gym/"+contest+"/standings"
 	else:
 		""" codeforces round """
-		browser.open("http://codeforces.com/contest/"+contest+"/standings/friends/true")
-		raw_html = browser.parsed
-	cf_standings.print_st(raw_html, verbose)
+		url = "http://codeforces.com/contest/"+contest+"/standings"
+	""" check if friends """ 
+	if top is None:
+		url += "/friends/true"
+	browser.open(url)
+	cf_standings.print_st(browser.parsed, verbose, top)
+
+""" print problem stats """
+def print_problems(handle, password, contest, verbose):
+	browser = login(handle, password)
+	if len(str(contest)) >= 6:
+		browser.open("http://codeforces.com/gym/"+contest)
+	else:
+		browser.open("http://codeforces.com/contest/"+contest)
+	cf_problems.print_prob(browser.parsed, verbose)
 
 
 """ main """
@@ -110,6 +122,7 @@ def main():
 	parser.add_argument("-w", "--watch", action="store_true", default=False, help="watch submission status")
 	parser.add_argument("-v", "--verbose", action="store_true", default=False, help="show more when looking at standings")
 	parser.add_argument("-t", "--top", type=int, nargs='?', const=10, default=None, help="number of top contestants to print")
+	parser.add_argument("-a", "--casual", action="store_true", default=False, help="use codeforces api because not virtual contest")
 	args = parser.parse_args()
 
 	if args.command == "gym" or args.command == "con":
@@ -140,18 +153,36 @@ def main():
 		cf_submit.watch(cf_login.get_secret(False))
 
 	elif args.command == "standings":
-		""" look at friends standings """
-		if args.top is None:
+		""" look at standings """
+		if args.casual:
+			""" must be top """
+			if args.contest is None:
+				cf_standings.print_casual(defaultcontest, args.verbose)
+			else:
+				cf_standings.print_casual(args.contest, args.verbose)
+		else:
+			""" could be friends """
 			handle, password = cf_login.get_secret(True)
 			if args.contest is None:
-				print_standings(handle, password, defaultcontest, args.verbose)
+				print_standings(handle, password, defaultcontest, args.verbose, args.top)
 			else:
-				print_standings(handle, password, args.contest, args.verbose)
-		else:
+				print_standings(handle, password, args.contest, args.verbose, args.top)
+
+	elif args.command == "problems":
+		""" look at problem stats """
+		if args.casual:
+			""" actual stats """
 			if args.contest is None:
-				cf_standings.print_top(defaultcontest, args.top)
+				cf_problems.print_casual(defaultcontest, args.verbose)
 			else:
-				cf_standings.print_top(args.contest, args.top)
+				cf_problems.print_casual(args.contest, args.verbose)
+		else:
+			""" virtual contest stats """
+			handle, password = cf_login.get_secret(True)
+			if args.contest is None: 
+				print_problems(handle, password, defaultcontest, args.verbose)
+			else:
+				print_problems(handle, password, args.contest, args.verbose)
 
 	elif args.command == "submit":
 		""" get handle and password """

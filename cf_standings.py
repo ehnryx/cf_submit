@@ -2,13 +2,12 @@ import sys
 import requests
 import json
 import re
-from bs4 import BeautifulSoup
 from prettytable import PrettyTable
 
 """ print friends standings in specified contest """
 """ parse html """
 """ gym contest """
-def print_st(raw_html, verbose):
+def print_st(raw_html, verbose, top):
 	""" set default encoding """
 	reload(sys)
 	sys.setdefaultencoding("utf-8")
@@ -19,9 +18,10 @@ def print_st(raw_html, verbose):
 	standings = PrettyTable()
 
 	""" get header """
+	firstpart = len(mellon[0].find_all("th")) - len(mellon[0].find_all("a"))
 	header = []
 	if verbose: 
-		for hcell in mellon[0].find_all("th")[:4]:
+		for hcell in mellon[0].find_all("th")[:firstpart]:
 			hcellstr = str(hcell.get_text(strip=True))
 			if hcellstr == "*":
 				hcellstr = "Hacks"
@@ -32,19 +32,27 @@ def print_st(raw_html, verbose):
 	for hcell in mellon[0].find_all("a"):
 		header.append(str(hcell.get_text(strip=True)))
 	standings.field_names = header
+	standings.align["Who"] = "l"
 
 	""" get rows """
-	for ami in mellon[1:-1]:
+	if top is None:
+		rankrowlist = mellon[1:-1]
+	else:
+		rankrowlist = mellon[1:top+1]
+	""" iterate """
+	for ami in rankrowlist:
 		virtual = True
 		row = ami.find_all("td")
 		tablerow = []
 		""" get place """
 		""" this cell has problems """
-		problemcell = str(row[0].get_text(strip=True))
-		if len(problemcell) == 0:
+		rank = str(row[0].get_text(strip=True))
+		if len(rank) == 0:
 			virtual = False
 		if verbose:
-			tablerow.append(re.sub(r'[^\x00-\x7F]+', ' ', problemcell))
+			if rank.find(')') != -1:
+				rank = rank[rank.find('(')+1:rank.find(')')]
+			tablerow.append(rank)
 		""" get name """
 		party = str(row[1].get_text(strip=True))
 		if verbose:
@@ -81,8 +89,6 @@ def print_st(raw_html, verbose):
 		standings.hrules = True
 	print standings
 	
-
-def print_top(contest, top):
+def print_casual(contest, verbose):
 	print "work in progress"
-	print "request for contestid=" + contest + " top " + str(top)
-	return
+	print "request: contest="+contest + " verbose="+str(verbose)
