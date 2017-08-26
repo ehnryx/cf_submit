@@ -115,7 +115,16 @@ def main():
 	
 	""" argparse """
 	parser = argparse.ArgumentParser(description="Command line tool to submit to codeforces", formatter_class=argparse.RawTextHelpFormatter)
-	parser.add_argument("command", help="peek -- look at last submission\n" + "watch -- watch last submission\n" + "con/gym -- change contest or gym id\n" + "login -- save login info\n" + "submit -- submit code to problem\n" + "standings -- show standings of friends in default contest, or specify contest with -p")
+	parser.add_argument("command", help=
+			"con/gym -- change contest or gym id\n" + 
+			"current -- current handle and contest id\n" + 
+			"login -- save login info\n" + 
+			"submit -- submit code to problem\n" + 
+			"peek -- look at last submission\n"	+ 
+			"watch -- watch last submission\n" + 
+			"standings -- show standings of friends in default contest, or specify contest with -p\n" +
+			"problems -- show number of solves on each problem\n"
+			)
 	parser.add_argument("option", nargs='?', default=None, help="file to submit")
 	parser.add_argument("-p", "--prob", action="store", default=None, help="specify problem, example: -p 845a")
 	parser.add_argument("-c", "--contest", action="store", default=None, help="specify contest when getting standings")
@@ -136,6 +145,11 @@ def main():
 			print("Gym set to " + contest)
 		else:
 			print("Contest set to " + contest)
+	
+	elif args.command == "current": 
+		handle = cf_login.get_secret(False)
+		print("handle: " + handle)
+		print("contestID: " + str(defaultcontest))
 	
 	elif args.command == "login":
 		""" set login info """
