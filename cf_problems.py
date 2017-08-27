@@ -16,6 +16,8 @@ def print_prob(raw_html, verbose, sort):
 	probraw = raw_html.find_all("table", class_="problems")[0].find_all("tr")
 	for row in probraw[1:]:
 		tablerow = []
+		if not verbose and row.has_attr("class") and row["class"][0] == "accepted-problem":
+			continue
 		cell = row.find_all("td")
 		tablerow.append(str(cell[0].get_text(strip=True)))
 		tablerow.append(str(cell[1].find("a").get_text(strip=True)))
@@ -23,9 +25,6 @@ def print_prob(raw_html, verbose, sort):
 		stats.add_row(tablerow)
 
 	""" printing """
-	if verbose:
-		print "verbose feature is not available"
-
 	stats.hrules = True
 	stats.align["Name"] = "l"
 	stats.align["Solves"] = "r"
