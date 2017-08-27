@@ -13,7 +13,7 @@ Then I realized I would rather not navigate codeforces in my browser because loo
 `--watch` or `-w` to Watch the status of submission after submitting it. Example: `cf submit a.cpp -p 844a -w` <br />
 `peek` to look at status of the last submission. Example: `cf peek` <br />
 `watch` to watch the status of the last submission if `-w` was not used. Example: `cf watch` <br />
-`login` to store login info (username and password), will prompt you to enter password. Example: `cf login` or `cf login henryx` <br />
+`login` to store login info (username and password), will prompt you to enter password. Example: `cf login` or `cf login <your handle>` <br />
 `info` to show stored handle and contest id. Example: `cf info` <br />
 Example: `cf submit code.cpp -p844a -w` <br />
 ## Print Standings
