@@ -30,5 +30,5 @@ Examples: `cf st -v -t7` or `cf standings -c844 -v -a` <br />
 Exmaples: `cf pb -v -s id` or `cf problems -c100187 -v` <br />
 
 ## Dependencies
-robobrowser <br />
-prettytable <br />
+robobrowser https://pypi.python.org/pypi/robobrowser <br />
+prettytable https://pypi.python.org/pypi/PrettyTable <br />
