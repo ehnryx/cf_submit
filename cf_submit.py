@@ -47,5 +47,5 @@ def watch(handle):
 			sys.stdout.flush()
 			count = (count+1) % 3
 		time.sleep(0.25)
-	print("")
+	print('\a')
 
