@@ -16,14 +16,18 @@ Then I realized I would rather not navigate codeforces in my browser because loo
 `login` to store login info (username and password), will prompt you to enter password. Example: `cf login` or `cf login henryx` <br />
 `info` to show stored handle and contest id. Example: `cf info` <br />
 Example: `cf submit code.cpp -p844a -w` <br />
-## Standings and Problem Stats
+## Print Standings
 `standings` or `st` to look at friends' standings. Example: `cf standings` <br />
-`problems` or `pb` to look at the number of solves for each problem in a contest. Example: `cf problems` <br />
 `--contest` or `-c` to specify the ID of the contest to look at. Example: `cf standings -c 844` <br />
-`--verbose` or `-v` to Print standings with more info. Example: `cf standings -v` **option not available for `problems`** <br />
-`--top` or `-t` to look top contestants instead of friends with `-t` or `--top`. Examples: `cf standings -t 20` <br />
-If no number is given, `--top` defaults to printing the top 10. <br />
-Examples: `cf standings -v -t7` or `cf standings -c844 -v -a` <br />
+`--verbose` or `-v` to print standings with more info. Example: `cf standings -v` <br />
+`--top` or `-t` to look top contestants instead of friends with `-t` or `--top`. If no number is given, `--top` defaults to printing the top 10. Example: `cf standings -t 20` <br />
+Examples: `cf st -v -t7` or `cf standings -c844 -v -a` <br />
+## Print Problem Stats
+`problems` or `pb` to look at the number of solves for each unsolved problem in a contest. Example: `cf problems` <br />
+`--contest` or `-c` to specify the ID of the contest. Example: `cf problems -c 844` <br />
+`--verbose` or `-v` to show solved problems as well. Example: `cf problems -v` <br />
+`--sort` or `-s` to sort problems based on: average submission `time` of top contestants, number of `solves`, or `index` (`id`). Default sort is by number of solves (you do not need to use `--sort`). Example: `cf problems -s id` <br />
+Exmaples: `cf pb -v -s id` or `cf problems -c100187 -v` <br />
 
 ## Dependencies
 robobrowser <br />
