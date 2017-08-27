@@ -26,7 +26,7 @@ Examples: `cf st -v -t7` or `cf standings -c844 -v -a` <br />
 `problems` or `pb` to look at the number of solves for each unsolved problem in a contest. Example: `cf problems` <br />
 `--contest` or `-c` to specify the ID of the contest. Example: `cf problems -c 844` <br />
 `--verbose` or `-v` to show solved problems as well. Example: `cf problems -v` <br />
-`--sort` or `-s` to sort problems based on: average submission `time` of top contestants, number of `solves`, or `index` (`id`). Default sort is by number of solves (you do not need to use `--sort`). Example: `cf problems -s id` <br />
+`--sort` or `-s` to sort problems by: number of `solves`, or `index` (`id`). Default sort is by number of solves (you do not need to use `--sort`). Example: `cf problems -s id` <br />
 Exmaples: `cf pb -v -s id` or `cf problems -c100187 -v` <br />
 
 ## Dependencies

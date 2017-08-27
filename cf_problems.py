@@ -1,4 +1,5 @@
 import sys
+from sets import Set
 from prettytable import PrettyTable
 
 def print_prob(raw_html, verbose, sort):
@@ -35,5 +36,3 @@ def print_prob(raw_html, verbose, sort):
 	else:
 		print stats
 
-def print_time(raw_html, verbose):
-	print "work in progress"

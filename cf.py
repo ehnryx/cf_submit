@@ -101,12 +101,8 @@ def print_problems(handle, password, contest, verbose, sort):
 		url = "http://codeforces.com/gym/"+contest
 	else:
 		url = "http://codeforces.com/contest/"+contest
-	""" go to standings if sort by time """
-	if sort == "time":
-		browser.open(url+"/standings")
-		cf_problems.print_time(browser.parsed, verbose)
-	elif sort is None or sort == "solves" or sort == "index":
-		browser.open(url)
+	browser.open(url);
+	if sort is None or sort == "solves" or sort == "index":
 		cf_problems.print_prob(browser.parsed, verbose, sort)
 	else:
 		print("UNKNOWN SORT")
@@ -139,7 +135,7 @@ def main():
 	parser.add_argument("-w", "--watch", action="store_true", default=False, help="watch submission status")
 	parser.add_argument("-v", "--verbose", action="store_true", default=False, help="show more when looking at standings")
 	parser.add_argument("-t", "--top", type=int, nargs='?', const=10, default=None, help="number of top contestants to print")
-	parser.add_argument("-s", "--sort", type=str, default="solves", help="sort by: solves (default), index (id), time")
+	parser.add_argument("-s", "--sort", type=str, default="solves", help="sort by: solves (default), index (id)")
 	args = parser.parse_args()
 
 	""" deal with short commands """
