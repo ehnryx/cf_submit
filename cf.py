@@ -95,15 +95,21 @@ def print_standings(handle, password, contest, verbose, top):
 	cf_standings.print_st(browser.parsed, verbose, top)
 
 """ print problem stats """
-def print_problems(handle, password, contest, verbose):
+def print_problems(handle, password, contest, verbose, sort):
 	browser = login(handle, password)
 	if len(str(contest)) >= 6:
 		url = "http://codeforces.com/gym/"+contest
 	else:
 		url = "http://codeforces.com/contest/"+contest
-	""" go to standings if verbose """
-	browser.open(url)
-	cf_problems.print_prob(browser.parsed, verbose)
+	""" go to standings if sort by time """
+	if sort == "time":
+		browser.open(url+"/standings")
+		cf_problems.print_time(browser.parsed, verbose)
+	elif sort is None or sort == "solves" or sort == "index":
+		browser.open(url)
+		cf_problems.print_prob(browser.parsed, verbose, sort)
+	else:
+		print("UNKNOWN SORT")
 
 
 """ main """
@@ -133,8 +139,18 @@ def main():
 	parser.add_argument("-w", "--watch", action="store_true", default=False, help="watch submission status")
 	parser.add_argument("-v", "--verbose", action="store_true", default=False, help="show more when looking at standings")
 	parser.add_argument("-t", "--top", type=int, nargs='?', const=10, default=None, help="number of top contestants to print")
+	parser.add_argument("-s", "--sort", type=str, default="solves", help="sort by: solves (default), index (id), time")
 	args = parser.parse_args()
 
+	""" deal with short commands """
+	if args.command == "st":
+		agrs.command = "standings"
+	elif args.command == "pb":
+		args.command = "problems"
+	if args.sort == "id":
+		args.sort = "index"
+
+	""" do stuff """
 	if args.command == "gym" or args.command == "con":
 		""" set contest """
 		contest = args.option
@@ -167,7 +183,7 @@ def main():
 	elif args.command == "watch": 
 		cf_submit.watch(cf_login.get_secret(False))
 
-	elif args.command == "standings" or args.command == "st":
+	elif args.command == "standings":
 		""" look at standings """
 		handle, password = cf_login.get_secret(True)
 		if args.contest is None:
@@ -175,13 +191,13 @@ def main():
 		else:
 			print_standings(handle, password, args.contest, args.verbose, args.top)
 
-	elif args.command == "problems" or args.command == "pb":
+	elif args.command == "problems":
 		""" look at problem stats """
 		handle, password = cf_login.get_secret(True)
 		if args.contest is None: 
-			print_problems(handle, password, defaultcontest, args.verbose)
+			print_problems(handle, password, defaultcontest, args.verbose, args.sort)
 		else:
-			print_problems(handle, password, args.contest, args.verbose)
+			print_problems(handle, password, args.contest, args.verbose, args.sort)
 
 	elif args.command == "submit":
 		""" get handle and password """
