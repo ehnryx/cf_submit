@@ -5,6 +5,9 @@ import re
 from prettytable import PrettyTable
 import colours
 
+def makeascii(s):
+	return re.sub(r'[^\x00-\x7f]',r'?',s)
+
 """ print friends standings in specified contest """
 """ parse html """
 """ gym contest """
@@ -59,47 +62,56 @@ def print_st(raw_html, verbose, top):
 		party = str(row[1].get_text(strip=True))
 		if verbose:
 			team = []
-			if party.count(':') == 2:
-				""" split at first colon """
-				team.append(party[:party.find(':')+1])
-				party = party[party.find(':')+1:]
-				""" split rest of team members """
-				for member in party[:-5].split(','):
-					team.append(member)
-				team.append(party[-5:])
-				party = '\n'.join(team)
-			elif party.count(':') == 1:
-				""" check if virtual colon or other """
-				if party[-3] == ':':
-					""" virtual time colon """
-					party = '\n'.join([party[:-5], party[-5:]])
-				else:
-					""" team name colon """
-					team.append(party[:party.find(':')])
-					if party[-1] == '#':
-						team[-1] += "#"
-						party = party[:-1]
-					team[-1] += ":"
-					for membergroup in party[party.find(':')+1:].split(','):
-						for member in membergroup.split():
-							team.append(member)
-					party = '\n'.join(team)
-		else:
-			""" check type """
-			if party.count(':') > 1:
-				""" check for # """
+			""" check if virtual time colon """
+			virtualtime = None
+			if party[-3] == ':':
+				virtualtime = party[-5:]
+				party = party[:-5]
+			""" check if there are still colons left
+			if yes, split at last colon """
+			if party.count(':') > 0:
+				""" check for '#' """
 				tail = ""
 				if party[-1] == '#':
 					tail = "#"
-				party = party.split(':')[0]
-				party += tail
-			elif party.count(':') == 1:
-				if party[-3] == ':':
-					party = party[:-5]
-				else:
-					party = party.split(':')[0]
-
-		tablerow.append(party)
+					party = party[:-1]
+				""" split """ 
+				party = party.split(':')
+				""" get first part (team name) """
+				teamname = party[0]
+				for partypart in party[1:-1]:
+					teamname += ":" + partypart
+				if len(teamname+tail) > 24:
+					print teamname[:20]
+					teamname = teamname[:20] + "..."
+				teamname += tail + ":"
+				team.append(teamname)
+				""" split rest of team members """
+				for member in party[-1].split(','):
+					team.append(member.strip())
+			else:
+				team.append(party)
+			""" append time if it exists"""
+			if virtualtime is not None:
+				team.append(virtualtime)
+			""" join party """
+			party = '\n'.join(team)
+		else:
+			if party[-3] == ':':
+				party = party[:-5]
+			if party.count(':') > 0:
+				tail = ""
+				if party[-1] == '#':
+					tail = "#"
+					party = party[:-1]
+				""" split """
+				party = party.split(':')
+				teamname = party[0]
+				for partypart in party[1:-1]:
+					teamname += ":" + partypart
+				teamname += tail
+				party = teamname
+		tablerow.append(makeascii(party))
 		""" get points or number of solves """
 		tablerow.append(str(row[2].get_text(strip=True)))
 		""" get penalty or hacks """
