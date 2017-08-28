@@ -38,10 +38,8 @@ def submit(handle, password, contest, problem, lang, source, watch):
 	else:
 		browser.open("http://codeforces.com/contest/" + contest + "/submit/" + problem.upper())
 
-	cf_submit.submit_problem(browser, contest, lang, source, watch)
-
 	""" show submission """
-	if watch:
+	if cf_submit.submit_problem(browser, contest, lang, source) and watch:
 		cf_submit.watch(handle)
 
 """ print standings """
@@ -210,6 +208,9 @@ def main():
 					print("cannot understand the problem specified")
 		elif len(info) == 2:
 			""" try to parse info[0] """
+			if info[0][:2].lower() == "cf":
+				""" remove the cf """
+				info[0] = info[0][2:]
 			if len(info[0]) == 1:
 				""" only the letter, use default contest """
 				submit(defaulthandle, defaultpass, defaultcontest, info[0], info[1], source, args.watch)

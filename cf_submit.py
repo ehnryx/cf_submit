@@ -52,12 +52,12 @@ def watch(handle):
 
 
 """ submit problem """
-def submit_problem(browser, contest, lang, source, watch):
+def submit_problem(browser, contest, lang, source):
 	""" get form """
 	submission = browser.get_form(class_="submit-form")
 	if submission is None:
 		print("Cannot find problem")
-		return
+		return False
 
 	""" submit form """
 	submission["sourceFile"] = source
@@ -80,7 +80,7 @@ def submit_problem(browser, contest, lang, source, watch):
 		langcode = "36"
 	else: 
 		print("Unknown Language")
-		return
+		return False
 	submission["programTypeId"] = langcode
 
 	browser.submit_form(submission)
@@ -88,11 +88,13 @@ def submit_problem(browser, contest, lang, source, watch):
 	""" check if good """
 	if browser.url[-3:] != "/my":
 		print("Failed to submit code")
-		return
+		return False
 	print("Code submitted properly")
 
 	""" now get time """
 	countdown_timer = browser.parsed.find_all("span", class_="contest-state-regular countdown before-contest-"+contest+"-finish")
 	if len(countdown_timer) > 0:
 		print colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset()
+	
+	return True
 
