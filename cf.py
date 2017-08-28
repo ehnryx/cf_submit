@@ -33,47 +33,14 @@ def submit(handle, password, contest, problem, lang, source, watch):
 	print("Submitting to problem " + contest + problem.upper() + " as " + handle)
 
 	browser = login(handle, password)
-
-	#browser = RoboBrowser(parser = "lxml")
 	if len(contest) >= 6:
 		browser.open("http://codeforces.com/gym/" + contest + "/submit/" + problem.upper())
 	else:
 		browser.open("http://codeforces.com/contest/" + contest + "/submit/" + problem.upper())
-	submission = browser.get_form(class_="submit-form")
-	if submission is None:
-		print("Cannot find problem")
-		return
-	submission["sourceFile"] = source
-	langcode = None
-	if lang == "cpp":
-		# GNU G++14 6.2.0
-		langcode = "50"
-		# GNU G++11 5.1.0
-		# langcode = "42"
-	elif lang == "c":
-		# GNU GCC C11 5.1.0
-		langcode = "43"
-	elif lang == "py":
-		# python 2.7.12
-		langcode = "7"
-		# python 3.5.2
-		# langcode = "31"
-	elif lang == "java": 
-		# Java 1.8.0_112
-		langcode = "36"
-	else: 
-		print("Unknown Language")
-		return
-	submission["programTypeId"] = langcode
 
-	browser.submit_form(submission)
-	
-	if browser.url[-3:] != "/my":
-		print("Failed to submit code")
-		return
+	cf_submit.submit_problem(browser, contest, lang, source, watch)
 
 	""" show submission """
-	print("Code submitted properly")
 	if watch:
 		cf_submit.watch(handle)
 

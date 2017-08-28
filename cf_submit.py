@@ -2,6 +2,7 @@ import sys
 import time
 import json
 import requests
+import colours
 
 """ submissions """ 
 def get_submission_data(handle):
@@ -48,4 +49,50 @@ def watch(handle):
 			count = (count+1) % 3
 		time.sleep(0.25)
 	print('\a')
+
+
+""" submit problem """
+def submit_problem(browser, contest, lang, source, watch):
+	""" get form """
+	submission = browser.get_form(class_="submit-form")
+	if submission is None:
+		print("Cannot find problem")
+		return
+
+	""" submit form """
+	submission["sourceFile"] = source
+	langcode = None
+	if lang == "cpp":
+		# GNU G++14 6.2.0
+		langcode = "50"
+		# GNU G++11 5.1.0
+		# langcode = "42"
+	elif lang == "c":
+		# GNU GCC C11 5.1.0
+		langcode = "43"
+	elif lang == "py":
+		# python 2.7.12
+		langcode = "7"
+		# python 3.5.2
+		# langcode = "31"
+	elif lang == "java": 
+		# Java 1.8.0_112
+		langcode = "36"
+	else: 
+		print("Unknown Language")
+		return
+	submission["programTypeId"] = langcode
+
+	browser.submit_form(submission)
+	
+	""" check if good """
+	if browser.url[-3:] != "/my":
+		print("Failed to submit code")
+		return
+	print("Code submitted properly")
+
+	""" now get time """
+	countdown_timer = browser.parsed.find_all("span", class_="contest-state-regular countdown before-contest-"+contest+"-finish")
+	if len(countdown_timer) > 0:
+		print colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset()
 
