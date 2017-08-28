@@ -1,8 +1,9 @@
 import sys
 from sets import Set
 from prettytable import PrettyTable
+import colours
 
-def print_prob(raw_html, verbose, sort):
+def print_prob(raw_html, contest, verbose, sort):
 	""" set default encoding """
 	reload(sys)
 	sys.setdefaultencoding("utf-8")
@@ -22,7 +23,11 @@ def print_prob(raw_html, verbose, sort):
 		cell = row.find_all("td")
 		tablerow.append(str(cell[0].get_text(strip=True)))
 		tablerow.append(str(cell[1].find("a").get_text(strip=True)))
-		tablerow.append(int(str(cell[3].get_text(strip=True))[1:]))
+		numstring = str(cell[3].get_text(strip=True))
+		if len(numstring) == 0:
+			tablerow.append(int(0))
+		else:
+			tablerow.append(int(numstring[1:]))
 		stats.add_row(tablerow)
 
 	""" printing """
@@ -35,4 +40,10 @@ def print_prob(raw_html, verbose, sort):
 		print stats.get_string(sortby="#")
 	else:
 		print stats
+
+	""" check for countdown timer """
+	countdown_id = "contest-state-regular countdown before-contest-"+contest+"-finish"
+	countdown_timer = raw_html.find_all("span", class_=countdown_id)
+	if len(countdown_timer) > 0:
+		print colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset()
 

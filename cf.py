@@ -10,6 +10,7 @@ import cf_login
 import cf_submit
 import cf_standings
 import cf_problems
+import colours
 
 """ login """
 def login(handle, password):
@@ -103,9 +104,23 @@ def print_problems(handle, password, contest, verbose, sort):
 		url = "http://codeforces.com/contest/"+contest
 	browser.open(url);
 	if sort is None or sort == "solves" or sort == "index":
-		cf_problems.print_prob(browser.parsed, verbose, sort)
+		cf_problems.print_prob(browser.parsed, contest, verbose, sort)
 	else:
 		print("UNKNOWN SORT")
+
+""" get time """
+def print_time(handle, password, contest):
+	browser = login(handle, password)
+	if len(str(contest)) >= 6:
+		url = "http://codeforces.com/gym/"+contest+"/submit"
+	else:
+		url = "http://codeforces.com/contest/"+contest+"/submit"
+	browser.open(url)
+	countdown_timer = browser.parsed.find_all("span", class_="contest-state-regular countdown before-contest-"+contest+"-finish")
+	if len(countdown_timer) == 0:
+		print("Contest " + contest + " is over")
+	else:
+		print(colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset())
 
 
 """ main """
@@ -128,6 +143,7 @@ def main():
 			"watch -- watch last submission\n" + 
 			"standings -- show standings of friends in default contest, or specify contest with -p\n" +
 			"problems -- show number of solves on each problem\n"
+			"time -- shows time left in contest\n"
 			)
 	parser.add_argument("option", nargs='?', default=None, help="file to submit")
 	parser.add_argument("-p", "--prob", action="store", default=None, help="specify problem, example: -p 845a")
@@ -140,7 +156,7 @@ def main():
 
 	""" deal with short commands """
 	if args.command == "st":
-		agrs.command = "standings"
+		args.command = "standings"
 	elif args.command == "pb":
 		args.command = "problems"
 	if args.sort == "id":
@@ -178,6 +194,13 @@ def main():
 	
 	elif args.command == "watch": 
 		cf_submit.watch(cf_login.get_secret(False))
+
+	elif args.command == "time": 
+		handle, password = cf_login.get_secret(True)
+		if args.contest is None:
+			print_time(handle, password, defaultcontest)
+		else:
+			print_time(handle, password, args.contest)
 
 	elif args.command == "standings":
 		""" look at standings """

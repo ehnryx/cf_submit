@@ -3,6 +3,7 @@ import requests
 import json
 import re
 from prettytable import PrettyTable
+import colours
 
 """ print friends standings in specified contest """
 """ parse html """
@@ -69,7 +70,7 @@ def print_st(raw_html, verbose, top):
 				party = '\n'.join(team)
 			elif party.count(':') == 1:
 				""" check if virtual colon or other """
-				if party.count(',') == 0:
+				if party[-3] == ':':
 					""" virtual time colon """
 					party = '\n'.join([party[:-5], party[-5:]])
 				else:
@@ -79,20 +80,24 @@ def print_st(raw_html, verbose, top):
 						team[-1] += "#"
 						party = party[:-1]
 					team[-1] += ":"
-					for member in party[party.find(':')+1:].split(','):
-						team.append(member)
+					for membergroup in party[party.find(':')+1:].split(','):
+						for member in membergroup.split():
+							team.append(member)
 					party = '\n'.join(team)
 		else:
 			""" check type """
-			if party.count(','):
+			if party.count(':') > 1:
 				""" check for # """
 				tail = ""
 				if party[-1] == '#':
 					tail = "#"
 				party = party.split(':')[0]
 				party += tail
-			elif party.count(':') != 0:
-				party = party[:-5]
+			elif party.count(':') == 1:
+				if party[-3] == ':':
+					party = party[:-5]
+				else:
+					party = party.split(':')[0]
 
 		tablerow.append(party)
 		""" get points or number of solves """
@@ -121,4 +126,11 @@ def print_st(raw_html, verbose, top):
 	standings.align["Who"] = "l"
 	standings.align["="] = "r"
 	print standings
+
+	""" first check if countdown """
+	#boldstart = "\033[1m"
+	#boldend = "\033[0;0m"
+	countdown_timer = raw_html.find_all("span", class_="countdown")
+	if len(countdown_timer) > 0:
+		print colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset()
 
