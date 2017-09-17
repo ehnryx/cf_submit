@@ -16,6 +16,7 @@ Then I realized I would rather not navigate codeforces in my browser because loo
 - `login` to store login info (username and password), will prompt you to enter password. Example: `cf login` or `cf login <your handle>`
 - `info` to show stored handle and contest id. Example: `cf info`
 - `time` to show time left in contest
+
 Examples: `cf submit code.cpp -p844a -w` <br />
 
 ## Print Standings
@@ -25,6 +26,7 @@ Examples: `cf submit code.cpp -p844a -w` <br />
 - `--top` or `-t` to look top contestants. Defaults to top 50 if `-t` is not included, top 10 if `--top` is included but no number is given. Example: `cf standings -t 20`
 - `--all` or `-a` to look at all contestants instead of only friends. Example: `cf standings --all`
 - `--sort` or `-s` to merge the solves of different rows belonging to the same handle. Will not merge two correct submissions on different rows. Example: `cf standings -s`
+
 Examples: `cf st -v -t7` or `cf standings -c844 -v -a` <br />
 
 ## Print Problem Stats
@@ -32,6 +34,7 @@ Examples: `cf st -v -t7` or `cf standings -c844 -v -a` <br />
 - `--contest` or `-c` to specify the ID of the contest. Example: `cf problems -c 844`
 - `--verbose` or `-v` to show solved problems as well. Example: `cf problems -v`
 - `--sort` or `-s` to sort problems by: number of `solves`, or `index` (`id`). Default sort is by number of solves (you do not need to use `--sort`). Example: `cf problems -s id`
+
 Exmaples: `cf pb -v -s id` or `cf problems -c100187 -v` <br />
 
 ## Dependencies
