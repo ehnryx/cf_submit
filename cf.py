@@ -121,7 +121,7 @@ def main():
 	parser.add_argument("-w", "--watch", action="store_true", default=False, help="watch submission status")
 	parser.add_argument("-v", "--verbose", action="store_true", default=False, help="show more when looking at standings")
 	parser.add_argument("-a", "--all", action="store_true", default=False, help="show common standings")
-	parser.add_argument("-t", "--top", type=int, nargs='?', const=10, default=24, help="number of top contestants to print")
+	parser.add_argument("-t", "--top", type=int, nargs='?', const=10, default=50, help="number of top contestants to print")
 	parser.add_argument("-s", "--sort", type=str, nargs='?', const="solves", default=None, help="sort by: solves (default), index (id)")
 	args = parser.parse_args()
 
