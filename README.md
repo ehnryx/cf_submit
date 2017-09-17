@@ -7,6 +7,9 @@ After being able to submit from the command line, I noticed that I was wasting t
 
 Then I realized I would rather not navigate codeforces in my browser because looking for my mouse is a hassle, so now I can look at the number of solves for each problem in the terminal as well.
 
+# Warning
+The handling of handle and password is unsafe.
+
 # Uses
 ## Submissions
 - `con` or `gym` to set default contest or gym ID. Example: `cf con 844` or `cf gym 101482`
