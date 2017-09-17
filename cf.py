@@ -43,7 +43,7 @@ def submit(handle, password, contest, problem, lang, source, watch):
 		cf_submit.watch(handle)
 
 """ print standings """
-def print_standings(handle, password, contest, verbose, top):
+def print_standings(handle, password, contest, verbose, top, sort, showall):
 	# requires login
 	browser = login(handle, password)
 	if len(str(contest)) >= 6:
@@ -53,12 +53,14 @@ def print_standings(handle, password, contest, verbose, top):
 		""" codeforces round """
 		url = "http://codeforces.com/contest/"+contest+"/standings"
 	""" check if friends """ 
-	if top is None:
+	if showall is False:
 		url += "/friends/true"
+		friends = True
 	else:
 		url += "/page/1"
+		friends = False
 	browser.open(url)
-	cf_standings.print_st(browser.parsed, verbose, top)
+	cf_standings.print_st(browser.parsed, verbose, top, sort, friends)
 
 """ print problem stats """
 def print_problems(handle, password, contest, verbose, sort):
@@ -68,7 +70,9 @@ def print_problems(handle, password, contest, verbose, sort):
 	else:
 		url = "http://codeforces.com/contest/"+contest
 	browser.open(url);
-	if sort is None or sort == "solves" or sort == "index":
+	if sort is None:
+		sort = "solves"
+	if sort == "solves" or sort == "index":
 		cf_problems.print_prob(browser.parsed, contest, verbose, sort)
 	else:
 		print("UNKNOWN SORT")
@@ -112,11 +116,13 @@ def main():
 			)
 	parser.add_argument("option", nargs='?', default=None, help="file to submit")
 	parser.add_argument("-p", "--prob", action="store", default=None, help="specify problem, example: -p 845a")
+	parser.add_argument("-l", "--lang", action="store", default=None, help="specify language, example: -l cpp11")
 	parser.add_argument("-c", "--contest", action="store", default=None, help="specify contest when getting standings")
 	parser.add_argument("-w", "--watch", action="store_true", default=False, help="watch submission status")
 	parser.add_argument("-v", "--verbose", action="store_true", default=False, help="show more when looking at standings")
-	parser.add_argument("-t", "--top", type=int, nargs='?', const=10, default=None, help="number of top contestants to print")
-	parser.add_argument("-s", "--sort", type=str, default="solves", help="sort by: solves (default), index (id)")
+	parser.add_argument("-a", "--all", action="store_true", default=False, help="show common standings")
+	parser.add_argument("-t", "--top", type=int, nargs='?', const=10, default=24, help="number of top contestants to print")
+	parser.add_argument("-s", "--sort", type=str, nargs='?', const="solves", default=None, help="sort by: solves (default), index (id)")
 	args = parser.parse_args()
 
 	""" deal with short commands """
@@ -171,9 +177,9 @@ def main():
 		""" look at standings """
 		handle, password = cf_login.get_secret(True)
 		if args.contest is None:
-			print_standings(handle, password, defaultcontest, args.verbose, args.top)
+			print_standings(handle, password, defaultcontest, args.verbose, args.top, args.sort, args.all)
 		else:
-			print_standings(handle, password, args.contest, args.verbose, args.top)
+			print_standings(handle, password, args.contest, args.verbose, args.top, args.sort, args.all)
 
 	elif args.command == "problems":
 		""" look at problem stats """
@@ -192,6 +198,10 @@ def main():
 		if source is None:
 			source = raw_input("File to submit: ")
 		info = source.split('.')
+		
+		""" check language """
+		if args.lang is not None:
+			info[-1] = args.lang
 
 		""" submit problem """
 		if args.prob is not None:
