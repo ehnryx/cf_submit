@@ -13,7 +13,7 @@ def makeascii(s):
 """ print friends standings in specified contest """
 """ parse html """
 """ gym contest """
-def print_st(raw_html, verbose, top, sort, friends):
+def print_st(raw_html, verbose, top, sort):
 	""" set default encoding """
 	reload(sys)
 	sys.setdefaultencoding("utf-8")
@@ -48,7 +48,7 @@ def print_st(raw_html, verbose, top, sort, friends):
 		solvecol += 1
 
 	""" if sort, use dict """
-	if sort == "solves" and friends:
+	if sort is not None:
 		handledict = {}
 
 	""" fix top """
@@ -140,7 +140,7 @@ def print_st(raw_html, verbose, top, sort, friends):
 				problemres = problemres.replace("-", "WA-")
 			tablerow.append(problemres)
 		""" check sort """
-		if sort == "solves" and friends:
+		if sort is not None:
 			""" add to dict """
 			""" make party legible """
 			if party[0] == '*':
@@ -178,7 +178,7 @@ def print_st(raw_html, verbose, top, sort, friends):
 			""" otherwise add to tablerow """
 			standings.add_row(tablerow)
 	
-	if sort == "solves" and friends:
+	if sort is not None:
 		""" add stuff to standings """
 		for key, rowinfo in handledict.items():
 			standings.add_row(rowinfo)
@@ -190,8 +190,10 @@ def print_st(raw_html, verbose, top, sort, friends):
 			standings.align["Penalty"] = "r"
 	standings.align["Who"] = "l"
 	standings.align["="] = "r"
-	if sort == "solves" and friends:
+	if sort == "solves":
 		print standings.get_string(sortby="=", reversesort=True)
+	elif sort == "index": 
+		print "nothing here"
 	else:
 		print standings
 

@@ -55,12 +55,10 @@ def print_standings(handle, password, contest, verbose, top, sort, showall):
 	""" check if friends """ 
 	if showall is False:
 		url += "/friends/true"
-		friends = True
 	else:
 		url += "/page/1"
-		friends = False
 	browser.open(url)
-	cf_standings.print_st(browser.parsed, verbose, top, sort, friends)
+	cf_standings.print_st(browser.parsed, verbose, top, sort)
 
 """ print problem stats """
 def print_problems(handle, password, contest, verbose, sort):
@@ -72,10 +70,7 @@ def print_problems(handle, password, contest, verbose, sort):
 	browser.open(url);
 	if sort is None:
 		sort = "solves"
-	if sort == "solves" or sort == "index":
-		cf_problems.print_prob(browser.parsed, contest, verbose, sort)
-	else:
-		print("UNKNOWN SORT")
+	cf_problems.print_prob(browser.parsed, contest, verbose, sort)
 
 """ get time """
 def print_time(handle, password, contest):
@@ -101,7 +96,7 @@ def main():
 		defaultcontest = contestfile.read().rstrip('\n')
 		contestfile.close()
 	
-	""" argparse """
+	""" ------------------- argparse -------------------- """
 	parser = argparse.ArgumentParser(description="Command line tool to submit to codeforces", formatter_class=argparse.RawTextHelpFormatter)
 	parser.add_argument("command", help=
 			"con/gym -- change contest or gym id\n" + 
@@ -113,18 +108,47 @@ def main():
 			"standings -- show standings of friends in default contest, or specify contest with -p\n" +
 			"problems -- show number of solves on each problem\n"
 			"time -- shows time left in contest\n"
-			)
-	parser.add_argument("option", nargs='?', default=None, help="file to submit")
-	parser.add_argument("-p", "--prob", action="store", default=None, help="specify problem, example: -p 845a")
-	parser.add_argument("-l", "--lang", action="store", default=None, help="specify language, example: -l cpp11")
-	parser.add_argument("-c", "--contest", action="store", default=None, help="specify contest when getting standings")
-	parser.add_argument("-w", "--watch", action="store_true", default=False, help="watch submission status")
-	parser.add_argument("-v", "--verbose", action="store_true", default=False, help="show more when looking at standings")
-	parser.add_argument("-a", "--all", action="store_true", default=False, help="show common standings")
-	parser.add_argument("-t", "--top", type=int, nargs='?', const=10, default=50, help="number of top contestants to print")
-	parser.add_argument("-s", "--sort", type=str, nargs='?', const="solves", default=None, help="sort by: solves (default), index (id)")
+	)
+	parser.add_argument("option", 
+			nargs='?', default=None, 
+			help="file to submit"
+	)
+	parser.add_argument("-p", "--prob", 
+			action="store", default=None, 
+			help="specify problem, example: -p 845a"
+	)
+	parser.add_argument("-l", "--lang", 
+			action="store", default=None, 
+			help="specify language, example: -l cpp11"
+	)
+	parser.add_argument("-c", "--contest", 
+			action="store", default=None, 
+			help="specify contest when getting standings"
+	)
+	parser.add_argument("-w", "--watch", 
+			action="store_true", default=False, 
+			help="watch submission status"
+	)
+	parser.add_argument("-v", "--verbose", 
+			action="store_true", default=False, 
+			help="show more when looking at standings"
+	)
+	parser.add_argument("-a", "--all", 
+			action="store_true", default=False, 
+			help="show common standings"
+	)
+	parser.add_argument("-t", "--top", 
+			type=int, nargs='?', const=10, default=50, 
+			help="number of top contestants to print"
+	)
+	parser.add_argument("-s", "--sort", 
+			choices=["solves", "index", "id"],
+			type=str, nargs='?', const="solves", default=None, 
+			help="sort by: solves (default), index (id)"
+	)
 	args = parser.parse_args()
 
+	""" -------------------------------------------------- """
 	""" deal with short commands """
 	if args.command == "st":
 		args.command = "standings"
