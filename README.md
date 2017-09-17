@@ -21,7 +21,7 @@ Example: `cf submit code.cpp -p844a -w` <br />
 `standings` or `st` to look at friends' standings. Example: `cf standings` <br />
 `--contest` or `-c` to specify the ID of the contest to look at. Example: `cf standings -c 844` <br />
 `--verbose` or `-v` to print standings with more info. Example: `cf standings -v` <br />
-`--top` or `-t` to look top contestants. Defaults to top 24 if `-t` is not included, top 10 if `--top` is included but no number is given. Example: `cf standings -t 20` <br />
+`--top` or `-t` to look top contestants. Defaults to top 50 if `-t` is not included, top 10 if `--top` is included but no number is given. Example: `cf standings -t 20` <br />
 `--all` or `-a` to look at all contestants instead of only friends. Example: `cf standings --all`
 `--friends` or `-f` to look at all friends instead of the default top 24. This will overwrite `--top` if both are used. Example: `cf standings -f`
 `--sort` or `-s` to merge the solves of different rows belonging to the same handle. Will not merge two correct submissions on different rows. Example: `cf standings -s`
