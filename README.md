@@ -1,4 +1,6 @@
 # cf-code-submit
+This is being rewritten in Java here https://github.com/ehnryx/cf_submit
+
 Submit code to codeforces from the command line, and other stuff. <br />
 
 In order to save the huge number of seconds needed to reach for the mouse during codeforces contests, I needed to be able to submit from the command line. There are many tools to do this for codeforces contests but I was unable to find an existing tool that allowed submissions to the codeforces gym for virtual contests, so I made this. 
