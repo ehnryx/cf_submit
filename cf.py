@@ -91,8 +91,9 @@ def print_time(handle, password, contest):
 def main():
 	""" get default gym contest """ 
 	defaultcontest = None
-	if os.path.isfile("/home/d/d0b1b/Tools/cf_submit/contestid"):
-		contestfile = open("/home/d/d0b1b/Tools/cf_submit/contestid", "r")
+	contest_loc = os.path.join(os.path.dirname(__file__), "contestid");
+	if os.path.isfile(contest_loc):
+		contestfile = open(contest_loc, "r")
 		defaultcontest = contestfile.read().rstrip('\n')
 		contestfile.close()
 	
@@ -163,7 +164,7 @@ def main():
 		contest = args.option
 		if contest is None: 
 			contest = raw_input("Contest/Gym number: ")
-		contestfile = open("/home/d/d0b1b/Tools/cf_submit/contestid", "w")
+		contestfile = open(contest_loc, "w")
 		contestfile.write(contest)
 		contestfile.close()
 		if len(contest) >= 6:

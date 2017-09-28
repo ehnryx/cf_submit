@@ -34,8 +34,9 @@ def encode(s):
 def get_secret(inclupass):
 	handle = None
 	password = None
-	if os.path.isfile("/home/d/d0b1b/Tools/cf_submit/secret"):
-		secretfile = open("/home/d/d0b1b/Tools/cf_submit/secret", "r")
+	secret_loc = os.path.join(os.path.dirname(__file__), "secret")
+	if os.path.isfile(secret_loc):
+		secretfile = open(secret_loc, "r")
 		rawdata = secretfile.read().rstrip('\n').split()
 		handle = decode(rawdata[0])
 		if inclupass:
@@ -65,7 +66,8 @@ def set_login(handle=None):
 		print("Login Failed.")
 		return
 	else:
-		secretfile = open("/home/d/d0b1b/Tools/cf_submit/secret", "w")
+		secret_loc = os.path.join(os.path.dirname(__file__), "secret")
+		secretfile = open(secret_loc, "w")
 		secretfile.write(encode(handle) + " " + encode(password))
 		secretfile.close()
 		print ("Successfully logged in as " + handle)
