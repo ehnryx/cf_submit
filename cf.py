@@ -28,20 +28,6 @@ def login(handle, password):
 	else:
 		return browser
 
-""" submit problem """
-def submit(handle, password, contest, problem, lang, source, watch):
-	print("Submitting to problem " + contest + problem.upper() + " as " + handle)
-
-	browser = login(handle, password)
-	if len(contest) >= 6:
-		browser.open("http://codeforces.com/gym/" + contest + "/submit/" + problem.upper())
-	else:
-		browser.open("http://codeforces.com/contest/" + contest + "/submit/" + problem.upper())
-
-	""" show submission """
-	if cf_submit.submit_problem(browser, contest, lang, source) and watch:
-		cf_submit.watch(handle)
-
 """ print standings """
 def print_standings(handle, password, contest, verbose, top, sort, showall):
 	# requires login
@@ -223,7 +209,9 @@ def main():
 			print_problems(handle, password, args.contest, args.verbose, args.sort)
 
 	elif args.command == "submit":
-		submit2(defaultcontest, args.prob, args.lang, args.option, args.watch)
+		""" get handle and password """
+		defaulthandle, defaultpass = cf_login.get_secret(True)
+		cf_submit.submit_files(defaulthandle, defaultpass, defaultcontest, args.prob, args.lang, args.option, args.watch)
 		
 	else:
 		print("UNKNOWN COMMAND")
