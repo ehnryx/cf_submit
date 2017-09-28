@@ -98,3 +98,51 @@ def submit_problem(browser, contest, lang, source):
 	
 	return True
 
+
+""" submit, possibly len(args) > 1 """
+def submit2(defaultcontest, defaultprob, defaultlang, args, watch):
+	""" get handle and password """
+	defaulthandle, defaultpass = cf_login.get_secret(True)
+
+	""" split file name """
+	source = args.option
+	if source is None:
+		source = raw_input("File to submit: ")
+	info = source.split('.')
+	
+	""" check language """
+	if args.lang is not None:
+		info[-1] = args.lang
+
+	""" submit problem """
+	if args.prob is not None:
+		if len(args.prob) == 1:
+			""" letter only """
+			submit(defaulthandle, defaultpass, defaultcontest, args.prob, info[-1], source, args.watch)
+		else:
+			"""  parse string """
+			splitted = re.split('(\D+)', args.prob)
+			if len(splitted) == 3 and len(splitted[1]) == 1 and len(splitted[2]) == 0:
+				""" probably a good string """
+				submit(defaulthandle, defaultpass, splitted[0], splitted[1], info[-1], source, args.watch)
+			else: 
+				print("cannot understand the problem specified")
+	elif len(info) == 2:
+		""" try to parse info[0] """
+		if info[0][:2].lower() == "cf":
+			""" remove the cf """
+			info[0] = info[0][2:]
+		if len(info[0]) == 1:
+			""" only the letter, use default contest """
+			submit(defaulthandle, defaultpass, defaultcontest, info[0], info[1], source, args.watch)
+		else: 
+			""" contest is included, so parse """
+			splitted = re.split('(\D+)', info[0])
+			if len(splitted) == 3 and len(splitted[1]) == 1 and len(splitted[2]) == 0:
+				""" probably good string ? """
+				submit(defaulthandle, defaultpass, splitted[0], splitted[1], info[1], source, args.watch)
+			else:
+				print("cannot parse filename, specify problem with -p or --prob")
+	else:
+		print("cannot parse filename, specify problem with -p or --prob")
+
