@@ -1,6 +1,7 @@
 import sys
 import time
 import json
+import re
 import requests
 import colours
 
@@ -97,4 +98,64 @@ def submit_problem(browser, contest, lang, source):
 		print colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset()
 	
 	return True
+
+
+""" submit problem """
+def submit(browser, handle, contest, problem, lang, source, show):
+	print("Submitting to problem " + contest + problem.upper() + " as " + handle)
+
+	if len(contest) >= 6:
+		browser.open("http://codeforces.com/gym/" + contest + "/submit/" + problem.upper())
+	else:
+		browser.open("http://codeforces.com/contest/" + contest + "/submit/" + problem.upper())
+
+	""" show submission """
+	if submit_problem(browser, contest, lang, source) and show:
+		watch(handle)
+
+""" submit, possibly len(args) > 1 """
+def submit_files(browser, defaulthandle, defaultcontest, defaultprob, defaultlang, args, show):
+	""" if len == 0, query for file """
+	if len(args) == 0:
+		args.append(raw_input("File to submit: "))
+
+	for source in args:
+		""" split file name """
+		info = source.split('.')
+		
+		""" check language """
+		if defaultlang is not None:
+			info[-1] = defaultlang
+
+		""" submit problem """
+		if defaultprob is not None:
+			if len(defaultprob) == 1:
+				""" letter only """
+				submit(browser, defaulthandle, defaultcontest, defaultprob, info[-1], source, show)
+			else:
+				"""  parse string """
+				splitted = re.split('(\D+)', defaultprob)
+				if len(splitted) == 3 and len(splitted[1]) == 1 and len(splitted[2]) == 0:
+					""" probably a good string """
+					submit(browser, defaulthandle, splitted[0], splitted[1], info[-1], source, show)
+				else: 
+					print("cannot understand the problem specified")
+		elif len(info) == 2:
+			""" try to parse info[0] """
+			if info[0][:2].lower() == "cf":
+				""" remove the cf """
+				info[0] = info[0][2:]
+			if len(info[0]) == 1:
+				""" only the letter, use default contest """
+				submit(browser, defaulthandle, defaultcontest, info[0], info[1], source, show)
+			else: 
+				""" contest is included, so parse """
+				splitted = re.split('(\D+)', info[0])
+				if len(splitted) == 3 and len(splitted[1]) == 1 and len(splitted[2]) == 0:
+					""" probably good string ? """
+					submit(browser, defaulthandle, splitted[0], splitted[1], info[1], source, show)
+				else:
+					print("cannot parse filename, specify problem with -p or --prob")
+		else:
+			print("cannot parse filename, specify problem with -p or --prob")
 
