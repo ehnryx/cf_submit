@@ -114,7 +114,7 @@ def submit(browser, handle, contest, problem, lang, source, show):
 		watch(handle)
 
 """ submit, possibly len(args) > 1 """
-def submit_files(browser, defaulthandle, defaultcontest, defaultprob, defaultlang, args, show):
+def submit_files(browser, defaulthandle, defaultcontest, defaultprob, defext, defaultlang, args, show):
 	""" if len == 0, query for file """
 	if len(args) == 0:
 		args.append(raw_input("File to submit: "))
@@ -122,6 +122,10 @@ def submit_files(browser, defaulthandle, defaultcontest, defaultprob, defaultlan
 	for source in args:
 		""" split file name """
 		info = source.split('.')
+		""" single filename """
+		if source.find('.') == -1:
+			info.append(defext)
+			source += "." + defext
 		
 		""" check language """
 		if defaultlang is not None:

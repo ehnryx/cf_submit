@@ -87,6 +87,7 @@ def main():
 	parser = argparse.ArgumentParser(description="Command line tool to submit to codeforces", formatter_class=argparse.RawTextHelpFormatter)
 	parser.add_argument("command", help=
 			"con/gym -- change contest or gym id\n" + 
+			"ext -- change default file extension\n" +
 			"info -- current handle and contest id\n" + 
 			"login -- save login info\n" + 
 			"submit -- submit code to problem\n" + 
@@ -148,12 +149,14 @@ def main():
 	if args.command == "gym" or args.command == "con":
 		""" set contest """
 		""" check if bad input """
-		if len(args.option) != 1:
+		if len(args.option) > 1:
 			print("Bad input")
 			return
 		""" keep going """
-		contest = args.option[0]
-		if contest is None: 
+		contest = None
+		if len(args.option) == 1:
+			contest = args.option[0]
+		else: 
 			contest = raw_input("Contest/Gym number: ")
 		contestfile = open(contest_loc, "w")
 		contestfile.write(contest)
@@ -162,6 +165,21 @@ def main():
 			print("Gym set to " + contest)
 		else:
 			print("Contest set to " + contest)
+	
+	elif args.command == "ext":
+		if len(args.option) > 1:
+			print("Bad input")
+			return
+		defext = None
+		if len(args.option) == 1:
+			defext = args.option[0]
+		else:
+			defext = raw_input("Default file extension: ")
+		defext_loc = os.path.join(os.path.dirname(__file__), "default_ext");
+		extfile = open(defext_loc, "w")
+		extfile.write(defext)
+		extfile.close()
+		print("Default extension set to " + defext)
 	
 	elif args.command == "info": 
 		handle = cf_login.get_secret(False)
@@ -209,11 +227,19 @@ def main():
 			print_problems(handle, password, args.contest, args.verbose, args.sort)
 
 	elif args.command == "submit":
+		""" get default ext """
+		defextension = None
+		defext_loc = os.path.join(os.path.dirname(__file__), "default_ext");
+		if os.path.isfile(defext_loc):
+			extfile = open(defext_loc, "r")
+			defextension = extfile.read().rstrip('\n')
+			extfile.close()
 		""" get handle and password """
 		defaulthandle, defaultpass = cf_login.get_secret(True)
+		""" open browser """
 		browser = login(defaulthandle, defaultpass)
 		if browser is not None:
-			cf_submit.submit_files(browser, defaulthandle, defaultcontest, args.prob, args.lang, args.option, args.watch)
+			cf_submit.submit_files(browser, defaulthandle, defaultcontest, args.prob, defextension, args.lang, args.option, args.watch)
 		
 	else:
 		print("UNKNOWN COMMAND")
