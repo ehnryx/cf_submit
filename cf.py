@@ -211,8 +211,9 @@ def main():
 	elif args.command == "submit":
 		""" get handle and password """
 		defaulthandle, defaultpass = cf_login.get_secret(True)
-		browser = cf_login.login(defaulthandle, defaultpass)
-		cf_submit.submit_files(browser, defaulthandle, defaultcontest, args.prob, args.lang, args.option, args.watch)
+		browser = login(defaulthandle, defaultpass)
+		if browser is not None:
+			cf_submit.submit_files(browser, defaulthandle, defaultcontest, args.prob, args.lang, args.option, args.watch)
 		
 	else:
 		print("UNKNOWN COMMAND")
