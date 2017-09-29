@@ -101,10 +101,9 @@ def submit_problem(browser, contest, lang, source):
 
 
 """ submit problem """
-def submit(handle, password, contest, problem, lang, source, watch):
+def submit(browser, handle, contest, problem, lang, source, watch):
 	print("Submitting to problem " + contest + problem.upper() + " as " + handle)
 
-	browser = login(handle, password)
 	if len(contest) >= 6:
 		browser.open("http://codeforces.com/gym/" + contest + "/submit/" + problem.upper())
 	else:
@@ -115,7 +114,7 @@ def submit(handle, password, contest, problem, lang, source, watch):
 		watch(handle)
 
 """ submit, possibly len(args) > 1 """
-def submit_files(defaulthandle, defaultpass, defaultcontest, defaultprob, defaultlang, args, watch):
+def submit_files(browser, defaulthandle, defaultcontest, defaultprob, defaultlang, args, watch):
 	""" if len == 0, query for file """
 	if len(args) == 0:
 		args.append(raw_input("File to submit: "))
@@ -132,13 +131,13 @@ def submit_files(defaulthandle, defaultpass, defaultcontest, defaultprob, defaul
 		if defaultprob is not None:
 			if len(defaultprob) == 1:
 				""" letter only """
-				submit(defaulthandle, defaultpass, defaultcontest, defaultprob, info[-1], source, watch)
+				submit(browser, defaulthandle, defaultcontest, defaultprob, info[-1], source, watch)
 			else:
 				"""  parse string """
 				splitted = re.split('(\D+)', defaultprob)
 				if len(splitted) == 3 and len(splitted[1]) == 1 and len(splitted[2]) == 0:
 					""" probably a good string """
-					submit(defaulthandle, defaultpass, splitted[0], splitted[1], info[-1], source, watch)
+					submit(browser, defaulthandle, splitted[0], splitted[1], info[-1], source, watch)
 				else: 
 					print("cannot understand the problem specified")
 		elif len(info) == 2:
@@ -148,13 +147,13 @@ def submit_files(defaulthandle, defaultpass, defaultcontest, defaultprob, defaul
 				info[0] = info[0][2:]
 			if len(info[0]) == 1:
 				""" only the letter, use default contest """
-				submit(defaulthandle, defaultpass, defaultcontest, info[0], info[1], source, watch)
+				submit(browser, defaulthandle, defaultcontest, info[0], info[1], source, watch)
 			else: 
 				""" contest is included, so parse """
 				splitted = re.split('(\D+)', info[0])
 				if len(splitted) == 3 and len(splitted[1]) == 1 and len(splitted[2]) == 0:
 					""" probably good string ? """
-					submit(defaulthandle, defaultpass, splitted[0], splitted[1], info[1], source, watch)
+					submit(browser, defaulthandle, splitted[0], splitted[1], info[1], source, watch)
 				else:
 					print("cannot parse filename, specify problem with -p or --prob")
 		else:
