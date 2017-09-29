@@ -1,5 +1,5 @@
 # cf-code-submit
-Submit code to codeforces from the command line, and other stuff. <br />
+Submit code to codeforces from the command line, and other stuff (display solves for each problem, display standings). <br />
 
 In order to save the huge number of seconds needed to reach for the mouse during codeforces contests, I needed to be able to submit from the command line. There are many tools to do this for codeforces contests but I was unable to find an existing tool that allowed submissions to the codeforces gym for virtual contests, so I made this. 
 
@@ -8,12 +8,20 @@ After being able to submit from the command line, I noticed that I was wasting t
 Then I realized I would rather not navigate codeforces in my browser because looking for my mouse is a hassle, so now I can look at the number of solves for each problem in the terminal as well.
 
 # Warning
-The handling of handle and password is unsafe.
+The handle and password are stored locally.
+
+# Setup (Linux)
+1. Clone the repository. `git clone https://github.com/ehnryx/cf_submit.git`
+1. cd into the cloned repository. `cd cf_submit`
+1. Move `cf.py` to `cf` for easy typing. `mv cf.py cf`
+1. Make the python script executable. `chmod +x cf`
+1. Edit `.bashrc` and add `cf_submit` to the `PATH`.
 
 # Uses
 ## Submissions
 - `con` or `gym` to set default contest or gym ID. Example: `cf con 844` or `cf gym 101482`
-- `submit` to submit code. Will try to guess problem. Example: `cf submit` or `cf submit a.cpp`
+- `ext` to set default file extension. Will be used when no file extension is given. (`cf submit a`)
+- `submit` to submit code. Will try to guess problem. Batch submit allowed. Example: `cf submit` or `cf submit a.cpp`
 - `--prob` or `-p` to specify problem. Example: `cf submit code.cpp -p 844a`
 - `--watch` or `-w` to Watch the status of submission after submitting it. Example: `cf submit a.cpp -p 844a -w`
 - `peek` to look at status of the last submission. Example: `cf peek`
