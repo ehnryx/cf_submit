@@ -5,11 +5,11 @@ import os
 import argparse
 import re
 from robobrowser import RoboBrowser
-import subprocess
 import cf_login
-import cf_submit
-import cf_standings
 import cf_problems
+import cf_standings
+import cf_submit
+import cf_test
 import colours
 
 """ login """
@@ -90,12 +90,13 @@ def main():
 			"ext -- change default file extension\n" +
 			"info -- current handle and contest id\n" + 
 			"login -- save login info\n" + 
-			"submit -- submit code to problem\n" + 
 			"peek -- look at last submission\n"	+ 
-			"watch -- watch last submission\n" + 
-			"standings -- show standings of friends in default contest, or specify contest with -p\n" +
 			"problems -- show number of solves on each problem\n"
-			"time -- shows time left in contest\n"
+			"standings -- show standings of friends in default contest, or specify contest with -p\n" +
+			"submit -- submit code to problem\n" + 
+			"time -- shows time left in contest\n" +
+			"test -- tests a problem by running the code on .in and comparing with .ans\n" +
+			"watch -- watch last submission\n"
 	)
 	parser.add_argument("option", 
 			nargs='*', default=None, 
@@ -240,6 +241,9 @@ def main():
 		browser = login(defaulthandle, defaultpass)
 		if browser is not None:
 			cf_submit.submit_files(browser, defaulthandle, defaultcontest, args.prob, defextension, args.lang, args.option, args.watch)
+	
+	elif args.command == "test":
+		cf_test.test(args.option)
 		
 	else:
 		print("UNKNOWN COMMAND")
