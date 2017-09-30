@@ -7,6 +7,3 @@ def test(args):
 	for prob in args:
 		testsc = Popen(["/bin/bash", "test_prob.sh", prob.lower()])
 		testsc.wait()
-
-	print "nothing here"
-	return
