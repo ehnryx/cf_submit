@@ -1,6 +1,6 @@
 echo "Testing problem $1"
 for i in $1*.in; do
 	echo "Running on file $i"
-	./a < "$i" > "${i%.in}.out"
-	diff "${i%.in}.out" "${i%.in}.ans"
+	"./$1" < "$i" > "${i%.in}.out"
+	"diff" "-b" "${i%.in}.out" "${i%.in}.ans"
 done
