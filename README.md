@@ -50,6 +50,10 @@ Examples: `cf st -v -t7` or `cf standings -c844 -v -a` <br />
 
 Exmaples: `cf pb -v -s id` or `cf problems -c100187 -v` <br />
 
+## Testing (Linux)
+- `test` to test code on input files. Suppose we want to test problem `a`. 
+Then `cf test a` will do the job. This will call `./a < a*.in > a*.out` for each file named in the form `a*.in`. Then it will compare `a*.out` with `a*.ans` ignoring differences in white space.
+
 ## Dependencies
 robobrowser https://pypi.python.org/pypi/robobrowser <br />
 prettytable https://pypi.python.org/pypi/PrettyTable <br />
