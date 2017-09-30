@@ -3,32 +3,38 @@ import random
 import getpass
 from robobrowser import RoboBrowser
 
+root = '7'
 """ converter """
 def decode(s):
+	global root
 	res = ""
 	length = len(s)
 	i = 0
 	while i < length:
-		jump = ord(s[i])-ord('7')
+		rng = ord(s[i])-ord(root)
+		jump = ord(s[i+1])-ord(root)
 		temp = 0
-		for j in range (0, jump):
-			temp += ord(s[i+j+1]) - ord('F')
+		for j in range (0, rng):
+			temp += ord(s[i+j+2]) - ord(root) - jump
 		res += str(chr(temp))
-		i += jump + 1
+		i += rng + 2
 	return res
 
 def encode(s):
+	global root
 	res = ""
 	length = len(s)
 	for i in range (0, length):
-		jump = random.randint(1, 20)
-		res += str(chr(jump + ord('7')))
+		rng = random.randint(1, 20)
+		res += str(chr(rng + ord(root)))
+		jump = random.randint(1,10)
+		res += str(chr(jump + ord(root)))
 		curr = ord(s[i])
-		for j in range (0, jump-1):
-			temp = random.randint(0, min(curr, 2+int(curr/(jump-j))))
-			res += str(chr(temp + ord('F')))
+		for j in range (0, rng-1):
+			temp = random.randint(0, min(curr, 2+int(curr/(rng-j))))
+			res += str(chr(temp + ord(root) + jump))
 			curr -= temp
-		res += str(chr(curr + ord('F')))
+		res += str(chr(curr + ord(root) + jump))
 	return res
 
 def get_secret(inclupass):
