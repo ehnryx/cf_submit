@@ -239,6 +239,8 @@ def main():
 		defaulthandle, defaultpass = cf_login.get_secret(True)
 		""" open browser """
 		browser = login(defaulthandle, defaultpass)
+		if args.contest is not None:
+			defaultcontest = args.contest
 		if browser is not None:
 			cf_submit.submit_files(browser, defaulthandle, defaultcontest, args.prob, defextension, args.lang, args.option, args.watch)
 	
