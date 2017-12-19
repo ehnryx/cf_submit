@@ -37,7 +37,14 @@ def print_st(raw_html, verbose, top, sort):
 			header.append(str(hcell.get_text(strip=True)))
 	for hcell in mellon[0].find_all("a"):
 		header.append(str(hcell.get_text(strip=True)))
+	""" append sorter to header """
+	if sort is not None:
+		header.append("sorter")
 	standings.field_names = header
+	
+	fields = dict()
+	for i in range(0, len(header)):
+		fields[header[i]] = i
 
 	""" find problemstart and solvecol """
 	problemstart = 0
@@ -55,6 +62,8 @@ def print_st(raw_html, verbose, top, sort):
 	top = min(top+1, len(mellon)-1)
 	""" get rows """
 	rankrowlist = mellon[1:top]
+
+
 	""" iterate """
 	for ami in rankrowlist:
 		virtual = True
@@ -69,6 +78,7 @@ def print_st(raw_html, verbose, top, sort):
 			if rank.find(')') != -1:
 				rank = rank[rank.find('(')+1:rank.find(')')]
 			tablerow.append(rank)
+
 		""" get name """
 		party = str(row[1].get_text(strip=True))
 		if verbose:
@@ -78,6 +88,7 @@ def print_st(raw_html, verbose, top, sort):
 			if party[-3] == ':':
 				virtualtime = party[-5:]
 				party = party[:-5]
+
 			""" check if there are still colons left
 			if yes, split at last colon """
 			if party.count(':') > 0:
@@ -125,11 +136,13 @@ def print_st(raw_html, verbose, top, sort):
 				teamname += tail
 				party = teamname
 		tablerow.append(makeascii(party))
+
 		""" get points or number of solves """
 		tablerow.append(int(str(row[2].get_text(strip=True))))
 		""" get penalty or hacks """
 		if verbose:
 			tablerow.append(str(row[3].get_text(strip=True)))
+
 		""" get problem submissions """
 		for cell in row[4:]:
 			problemres = str(cell.get_text(strip=True))
@@ -141,6 +154,7 @@ def print_st(raw_html, verbose, top, sort):
 			else:
 				problemres = problemres.replace("-", "WA-")
 			tablerow.append(problemres)
+
 		""" check sort """
 		if sort is not None:
 			""" add to dict """
@@ -149,13 +163,13 @@ def print_st(raw_html, verbose, top, sort):
 				party = party[1:]
 			if party[-1] == '#':
 				party = party[:-1]
+
 			""" check if party exists """
 			if party not in handledict:
 				handledict[party] = tablerow
 			else:
 				""" update """ 
-				length = len(header)
-				for i in range (problemstart, length):
+				for i in range (problemstart, len(header)-1):
 					""" update if empty or wa """
 					if len(handledict[party][i]) == 0:
 						handledict[party][i] = tablerow[i]
@@ -177,27 +191,45 @@ def print_st(raw_html, verbose, top, sort):
 							""" update solvecol """
 							handledict[party][solvecol] += 1
 		else:
-			""" otherwise add to tablerow """
+			""" NO sort, add to tablerow """
 			standings.add_row(tablerow)
-	
-	if sort is not None:
-		""" add stuff to standings """
-		for key, rowinfo in handledict.items():
-			standings.add_row(rowinfo)
 
-	""" print standings """
+	""" standings properties """
 	if verbose:
 		standings.hrules = True
 		if "Penalty" in standings.align:
 			standings.align["Penalty"] = "r"
 	standings.align["Who"] = "l"
 	standings.align["="] = "r"
-	if sort == "solves":
-		print standings.get_string(sortby="=", reversesort=True)
-	elif sort == "index": 
-		print "nothing here"
-	else:
+
+	""" print standings """
+	if sort is None:
 		print standings
+
+	elif sort == "solves":
+		""" add rowinfo to standings """
+		for key, rowinfo in handledict.items():
+			""" append the sorter """ 
+			sortvalue = rowinfo[fields["="]]
+			if "Penalty" in fields:
+				if len(rowinfo[fields["Penalty"]]) == 0:
+					sortvalue = 100000*sortvalue - 99999
+				else:
+					sortvalue = 100000*sortvalue - int(rowinfo[fields["Penalty"]])
+			rowinfo.append(sortvalue)
+			standings.add_row(rowinfo)
+		""" print """ 
+		print standings.get_string(
+				sortby="sorter", 
+				reversesort=True,
+				fields=header[:-1]
+		)
+
+	elif sort == "index": 
+		print "sort == index : nothing here"
+
+	else:
+		print "this should not have happened. nothing here"
 
 	""" first check if countdown """
 	#boldstart = "\033[1m"
