@@ -120,6 +120,8 @@ def print_st(raw_html, verbose, top, sort):
 				teamname = party[0]
 				for partypart in party[1:-1]:
 					teamname += ":" + partypart
+				if len(teamname) > 32:
+					teamname = teamname[:32] + "..."
 				teamname += tail
 				party = teamname
 		tablerow.append(makeascii(party))

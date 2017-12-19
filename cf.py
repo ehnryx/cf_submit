@@ -245,7 +245,7 @@ def main():
 			cf_submit.submit_files(browser, defaulthandle, defaultcontest, args.prob, defextension, args.lang, args.option, args.watch)
 	
 	elif args.command == "test":
-		cf_test.test(args.option)
+		cf_test.test(args.option, args.verbose)
 		
 	else:
 		print("UNKNOWN COMMAND")
