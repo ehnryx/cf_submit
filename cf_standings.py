@@ -41,7 +41,16 @@ def print_st(raw_html, verbose, top, sort):
 	if sort is not None:
 		header.append("sorter")
 	standings.field_names = header
-	
+
+	id_start = 4
+	if not verbose:
+		id_start = 0
+		for hcell in mellon[0].find_all("th"):
+			hcellstr = str(hcell.get_text(strip=True))
+			if hcellstr == 'A':
+				break
+			id_start += 1
+
 	fields = dict()
 	for i in range(0, len(header)):
 		fields[header[i]] = i
@@ -104,7 +113,6 @@ def print_st(raw_html, verbose, top, sort):
 				for partypart in party[1:-1]:
 					teamname += ":" + partypart
 				if len(teamname+tail) > 24:
-					print teamname[:20]
 					teamname = teamname[:20] + "..."
 				teamname += tail + ":"
 				team.append(teamname)
@@ -144,7 +152,7 @@ def print_st(raw_html, verbose, top, sort):
 			tablerow.append(str(row[3].get_text(strip=True)))
 
 		""" get problem submissions """
-		for cell in row[4:]:
+		for cell in row[id_start:]:
 			problemres = str(cell.get_text(strip=True))
 			if virtual and len(problemres) > 5:
 				if verbose:
@@ -178,7 +186,7 @@ def print_st(raw_html, verbose, top, sort):
 							handledict[party][solvecol] += 1
 					elif handledict[party][i][0] != '+' and len(tablerow[i]) != 0:
 						totalwa = int(handledict[party][i].split('\n')[0].split('-')[1])
-						if tablerow[i][0] != '+':
+						if tablerow[i].find('-') != -1:
 							""" add wa """
 							totalwa += int(tablerow[i].split('\n')[0].split('-')[1])
 							handledict[party][i] = "WA-"+str(totalwa)

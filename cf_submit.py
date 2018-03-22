@@ -71,14 +71,25 @@ def submit_problem(browser, contest, lang, source):
 	elif lang == "c":
 		# GNU GCC C11 5.1.0
 		langcode = "43"
+	elif lang == "d":
+		langcode = "28"
 	elif lang == "py":
 		# python 2.7.12
 		langcode = "7"
 		# python 3.5.2
 		# langcode = "31"
+	elif lang == "rb":
+		# Ruby 2.0.0p645
+		langcode = "8"
 	elif lang == "java": 
 		# Java 1.8.0_112
 		langcode = "36"
+	elif lang == "scala":
+		langcode = "20"
+	elif lang == "rs":
+		langcode = "49"
+	elif lang == "php":
+		langcode = "6"
 	else: 
 		print("Unknown Language")
 		return False
@@ -89,6 +100,7 @@ def submit_problem(browser, contest, lang, source):
 	""" check if good """
 	if browser.url[-3:] != "/my":
 		print("Failed to submit code")
+		print(" @ " + str(browser.url))
 		return False
 	print("Code submitted properly")
 

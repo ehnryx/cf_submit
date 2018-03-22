@@ -10,6 +10,7 @@ if [[ $1 == *.py ]]; then
 		else
 			python $1 < $i > ${i/.in/.out}
 		fi
+		"diff" "-b" "${i/.in/.out}" "${i/.in/.ans}"
 	done
 else
 	echo "Testing problem $1"
