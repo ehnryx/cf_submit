@@ -8,3 +8,4 @@ colours.pyc
 contestid
 secret
 default_ext
+__pycache__
