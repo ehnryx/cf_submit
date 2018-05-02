@@ -1,13 +1,8 @@
 import sys
-from sets import Set
 from prettytable import PrettyTable
 import colours
 
 def print_prob(raw_html, contest, verbose, sort):
-	""" set default encoding """
-	reload(sys)
-	sys.setdefaultencoding("utf-8")
-
 	stats = PrettyTable()
 
 	""" header """
@@ -35,15 +30,15 @@ def print_prob(raw_html, contest, verbose, sort):
 	stats.align["Name"] = "l"
 	stats.align["Solves"] = "r"
 	if sort == "solves":
-		print stats.get_string(sortby="Solves", reversesort=True)
+		print(stats.get_string(sortby="Solves", reversesort=True))
 	elif sort == "index":
-		print stats.get_string(sortby="#")
+		print(stats.get_string(sortby="#"))
 	else:
-		print stats
+		print(stats)
 
 	""" check for countdown timer """
 	countdown_id = "contest-state-regular countdown before-contest-"+contest+"-finish"
 	countdown_timer = raw_html.find_all("span", class_=countdown_id)
 	if len(countdown_timer) > 0:
-		print colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset()
+		print(colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset())
 

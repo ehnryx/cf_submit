@@ -14,10 +14,6 @@ def makeascii(s):
 """ parse html """
 """ gym contest """
 def print_st(raw_html, verbose, top, sort):
-	""" set default encoding """
-	reload(sys)
-	sys.setdefaultencoding("utf-8")
-
 	""" get standings table """
 	mellon = raw_html.find_all("table", class_="standings")[0].find_all("tr")
 	
@@ -212,7 +208,7 @@ def print_st(raw_html, verbose, top, sort):
 
 	""" print standings """
 	if sort is None:
-		print standings
+		print(standings)
 
 	elif sort == "solves":
 		""" add rowinfo to standings """
@@ -227,22 +223,22 @@ def print_st(raw_html, verbose, top, sort):
 			rowinfo.append(sortvalue)
 			standings.add_row(rowinfo)
 		""" print """ 
-		print standings.get_string(
+		print(standings.get_string(
 				sortby="sorter", 
 				reversesort=True,
 				fields=header[:-1]
-		)
+		))
 
 	elif sort == "index": 
-		print "sort == index : nothing here"
+		print("sort == index : nothing here")
 
 	else:
-		print "this should not have happened. nothing here"
+		print("this should not have happened. nothing here")
 
 	""" first check if countdown """
 	#boldstart = "\033[1m"
 	#boldend = "\033[0;0m"
 	countdown_timer = raw_html.find_all("span", class_="countdown")
 	if len(countdown_timer) > 0:
-		print colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset()
+		print(colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset())
 

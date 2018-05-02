@@ -107,7 +107,7 @@ def submit_problem(browser, contest, lang, source):
 	""" now get time """
 	countdown_timer = browser.parsed.find_all("span", class_="contest-state-regular countdown before-contest-"+contest+"-finish")
 	if len(countdown_timer) > 0:
-		print colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset()
+		print(colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset())
 	
 	return True
 

@@ -56,13 +56,13 @@ def get_secret(inclupass):
 """ set login """
 def set_login(handle=None):
 	if handle is None:
-		handle = raw_input("Handle: ")
+		handle = input("Handle: ")
 	password = getpass.getpass("Password: ")
 
 	browser = RoboBrowser(parser = "lxml")
 	browser.open("http://codeforces.com/enter")
 	enter_form = browser.get_form("enterForm")
-	enter_form["handle"] = handle
+	enter_form["handleOrEmail"] = handle
 	enter_form["password"] = password
 	browser.submit_form(enter_form)
 
@@ -76,5 +76,5 @@ def set_login(handle=None):
 		secretfile = open(secret_loc, "w")
 		secretfile.write(encode(handle) + " " + encode(password))
 		secretfile.close()
-		print ("Successfully logged in as " + handle)
+		print("Successfully logged in as " + handle)
 
