@@ -57,3 +57,6 @@ Then `cf test a` will do the job. This will call `./a < a*.in > a*.out` for each
 ## Dependencies
 robobrowser https://pypi.python.org/pypi/robobrowser <br />
 prettytable https://pypi.python.org/pypi/PrettyTable <br />
+
+## Note
+This script uses python3
