@@ -148,6 +148,9 @@ def submit_files(browser, defaulthandle, defaultcontest, defaultprob, defext, de
 			if len(defaultprob) == 1:
 				""" letter only """
 				submit(browser, defaulthandle, defaultcontest, defaultprob, info[-1], source, show)
+			elif len(defaultprob) == 2:
+				""" letter + number (?) """
+				submit(browser, defaulthandle, defaultcontest, defaultprob, info[-1], source, show)
 			else:
 				"""  parse string """
 				splitted = re.split('(\D+)', defaultprob)

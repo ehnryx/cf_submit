@@ -47,7 +47,7 @@ def print_st(raw_html, verbose, top, sort):
 		id_start = 0
 		for hcell in mellon[0].find_all("th"):
 			hcellstr = str(hcell.get_text(strip=True))
-			if hcellstr == 'A':
+			if hcellstr.find('A') != -1:
 				break
 			id_start += 1
 
@@ -57,7 +57,7 @@ def print_st(raw_html, verbose, top, sort):
 
 	""" find problemstart and solvecol """
 	problemstart = 0
-	while header[problemstart] != "A":
+	while header[problemstart].find("A") == -1:
 		problemstart += 1
 	solvecol = 0
 	while header[solvecol] != "=":
