@@ -5,6 +5,7 @@ import os
 import argparse
 import re
 from robobrowser import RoboBrowser
+import cf_coach
 import cf_login
 import cf_problems
 import cf_standings
@@ -12,26 +13,10 @@ import cf_submit
 import cf_test
 import colours
 
-""" login """
-def login(handle, password):
-	browser = RoboBrowser(parser = "lxml")
-	browser.open("http://codeforces.com/enter")
-	enter_form = browser.get_form("enterForm")
-	enter_form["handleOrEmail"] = handle
-	enter_form["password"] = password
-	browser.submit_form(enter_form)
-
-	checks = list(map(lambda x: x.getText()[1:].strip(), browser.select("div.caption.titled")))
-	if handle not in checks:
-		print("Login Corrupted.")
-		return None
-	else:
-		return browser
-
 """ print standings """
-def print_standings(handle, password, contest, verbose, top, sort, showall):
+def print_standings(contest, verbose, top, sort, showall):
 	# requires login
-	browser = login(handle, password)
+	browser = cf_login.login()
 	if len(str(contest)) >= 6:
 		""" gym contest """
 		url = "http://codeforces.com/gym/"+contest+"/standings"
@@ -47,8 +32,8 @@ def print_standings(handle, password, contest, verbose, top, sort, showall):
 	cf_standings.print_st(browser.parsed, verbose, top, sort)
 
 """ print problem stats """
-def print_problems(handle, password, contest, verbose, sort):
-	browser = login(handle, password)
+def print_problems(contest, verbose, sort):
+	browser = cf_login.login()
 	if len(str(contest)) >= 6:
 		url = "http://codeforces.com/gym/"+contest
 	else:
@@ -59,8 +44,8 @@ def print_problems(handle, password, contest, verbose, sort):
 	cf_problems.print_prob(browser.parsed, contest, verbose, sort)
 
 """ get time """
-def print_time(handle, password, contest):
-	browser = login(handle, password)
+def print_time(contest):
+	browser = cf_login.login()
 	if len(str(contest)) >= 6:
 		url = "http://codeforces.com/gym/"+contest+"/submit"
 	else:
@@ -96,7 +81,8 @@ def main():
 			"submit -- submit code to problem\n" + 
 			"time -- shows time left in contest\n" +
 			"test -- tests a problem by running the code on .in and comparing with .ans\n" +
-			"watch -- watch last submission\n"
+			"watch -- watch last submission\n" +
+			"coach -- toggle coach mode\n"
 	)
 	parser.add_argument("option", 
 			nargs='*', default=None, 
@@ -147,7 +133,14 @@ def main():
 		args.sort = "index"
 
 	""" do stuff """
-	if args.command == "gym" or args.command == "con":
+	if args.command == "coach":
+		""" toggle coach mode """
+		if len(args.option) != 1:
+			print("Bad input")
+			return
+		cf_coach.coach_mode(args.option[0] == "on")
+
+	elif args.command == "gym" or args.command == "con":
 		""" set contest """
 		""" check if bad input """
 		if len(args.option) > 1:
@@ -205,27 +198,24 @@ def main():
 		cf_submit.watch(cf_login.get_secret(False))
 
 	elif args.command == "time": 
-		handle, password = cf_login.get_secret(True)
 		if args.contest is None:
-			print_time(handle, password, defaultcontest)
+			print_time(defaultcontest)
 		else:
-			print_time(handle, password, args.contest)
+			print_time(args.contest)
 
 	elif args.command == "standings":
 		""" look at standings """
-		handle, password = cf_login.get_secret(True)
 		if args.contest is None:
-			print_standings(handle, password, defaultcontest, args.verbose, args.top, args.sort, args.all)
+			print_standings(defaultcontest, args.verbose, args.top, args.sort, args.all)
 		else:
-			print_standings(handle, password, args.contest, args.verbose, args.top, args.sort, args.all)
+			print_standings(args.contest, args.verbose, args.top, args.sort, args.all)
 
 	elif args.command == "problems":
 		""" look at problem stats """
-		handle, password = cf_login.get_secret(True)
 		if args.contest is None: 
-			print_problems(handle, password, defaultcontest, args.verbose, args.sort)
+			print_problems(defaultcontest, args.verbose, args.sort)
 		else:
-			print_problems(handle, password, args.contest, args.verbose, args.sort)
+			print_problems(args.contest, args.verbose, args.sort)
 
 	elif args.command == "submit":
 		""" get default ext """
@@ -238,7 +228,7 @@ def main():
 		""" get handle and password """
 		defaulthandle, defaultpass = cf_login.get_secret(True)
 		""" open browser """
-		browser = login(defaulthandle, defaultpass)
+		browser = cf_login.login()
 		if args.contest is not None:
 			defaultcontest = args.contest
 		if browser is not None:
