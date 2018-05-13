@@ -75,9 +75,9 @@ def submit_problem(browser, contest, lang, source):
 		langcode = "28"
 	elif lang == "py":
 		# python 2.7.12
-		langcode = "7"
+		#langcode = "7"
 		# python 3.5.2
-		# langcode = "31"
+		langcode = "31"
 	elif lang == "rb":
 		# Ruby 2.0.0p645
 		langcode = "8"
