@@ -9,3 +9,4 @@ contestid
 secret
 default_ext
 __pycache__
+*.backup
