@@ -8,7 +8,7 @@ After being able to submit from the command line, I noticed that I was wasting t
 Then I realized I would rather not navigate codeforces in my browser because looking for my mouse is a hassle, so now I can look at the number of solves for each problem in the terminal as well.
 
 # NEW
-Now you can hack submissions of both Educational and Div.3 contests, just copy your hack test into text file (ex:`hack.txt`) and use the script in this way : `cf hack hack.txt -p a`.
+Now you can hack submissions of both Educational and Div.3 contests, just copy your hack test into text file (ex:`hack.txt`) and use the script in this way : `cf hack hack.txt --prob a`.
 
 # Warning
 The handle and password are stored.
