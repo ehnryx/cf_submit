@@ -10,6 +10,7 @@ import cf_login
 import cf_problems
 import cf_standings
 import cf_submit
+import cf_hack
 import cf_test
 import colours
 
@@ -309,6 +310,17 @@ def main():
                 args.lang, args.option, args.watch, args.guru
             )
 
+    elif args.command == "hack":
+        if len(args.option) == 0:
+            print("Please select hack test file!!")
+            return
+        if args.prob is None:
+            print("Please choose problem to hack!!")
+            return
+        defaulthandle, defaultpass = cf_login.get_secret(True)
+        browser = cf_login.login()
+        if browser is not None:
+            cf_hack.hack(browser,defaulthandle,defaultcontest,args.prob,args.option[0])
     elif args.command == "test":
         cf_test.test(args.option, args.verbose)
 
