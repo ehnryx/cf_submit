@@ -5,7 +5,7 @@ import re
 import requests
 import colours
 
-""" submissions """
+# submissions
 
 
 def get_submission_data(handle):
@@ -22,7 +22,7 @@ def get_submission_data(handle):
     return res["id"], res["problem"], res["verdict"], res["passedTestCount"], res["timeConsumedMillis"], res["memoryConsumedBytes"]
 
 
-""" look at last submission """
+# look at last submission
 
 
 def peek(handle):
@@ -41,7 +41,7 @@ def peek(handle):
                   + str(passedTests) + " tests\n" + "Time: " + str(timeCon) + "ms \n" + "Memory: " + str(memCon / 1024) + "Kb")
 
 
-""" watch last submission """
+# watch last submission
 
 
 def watch(handle):
@@ -71,17 +71,17 @@ def watch(handle):
     print('\a')
 
 
-""" submit problem """
+# submit problem
 
 
 def submit_problem(browser, group, contest, lang, source, guru):
-    """ get form """
+    # get form
     submission = browser.get_form(class_="submit-form")
     if submission is None:
         print("Cannot find problem")
         return False
 
-    """ submit form """
+    # submit form
     submission["sourceFile"] = source
     langcode = None
     if lang == "cpp":
@@ -122,14 +122,14 @@ def submit_problem(browser, group, contest, lang, source, guru):
 
     browser.submit_form(submission)
 
-    """ check if good """
+    # check if good
     if (guru != -1 and browser.url[-7:] != "/status") or (guru == -1 and browser.url[-3:] != "/my"):
         print("Failed to submit code")
         print(" @ " + str(browser.url))
         return False
     print("Code submitted properly")
 
-    """ now get time """
+    # now get time
     countdown_timer = browser.parsed.find_all(
         "span", class_="contest-state-regular countdown before-contest-" + contest + "-finish")
     if len(countdown_timer) > 0:
@@ -139,7 +139,7 @@ def submit_problem(browser, group, contest, lang, source, guru):
     return True
 
 
-""" submit problem """
+# submit problem
 
 
 def submit(browser, handle, group, contest, problem, lang, source, show, guru):
@@ -166,46 +166,46 @@ def submit(browser, handle, group, contest, problem, lang, source, show, guru):
         browser.open("http://codeforces.com/contest/" +
                      contest + "/submit/" + problem.upper())
 
-    """ show submission """
+    # show submission
     if submit_problem(browser, group, contest, lang, source, pid) and show:
         watch(handle)
 
 
-""" submit, possibly len(args) > 1 """
+# submit, possibly len(args) > 1
 
 
 def submit_files(browser, defaulthandle, defaultgroup, defaultcontest, defaultprob, defext, defaultlang, args, show, guru):
-    """ if len == 0, query for file """
+    # if len == 0, query for file
     if len(args) == 0:
         args.append(raw_input("File to submit: "))
 
     for source in args:
-        """ split file name """
+        # split file name
         info = source.split('.')
-        """ single filename """
+        # single filename
         if source.find('.') == -1:
             info.append(defext)
             source += "." + defext
 
-        """ check language """
+        # check language
         if defaultlang is not None:
             info[-1] = defaultlang
 
-        """ submit problem """
+        # submit problem
         if defaultprob is not None:
             if len(defaultprob) == 1:
-                """ letter only """
+                # letter only
                 submit(browser, defaulthandle, defaultgroup, defaultcontest,
                        defaultprob, info[-1], source, show, guru)
             elif len(defaultprob) == 2:
-                """ letter + number (?) """
+                # letter + number (?)
                 submit(browser, defaulthandle, defaultgroup, defaultcontest,
                        defaultprob, info[-1], source, show, guru)
             else:
-                """  parse string """
+                #  parse string
                 splitted = re.split('(\D+)', defaultprob)
                 if len(splitted) == 3 and len(splitted[1]) == 1 and len(splitted[2]) == 0:
-                    """ probably a good string """
+                    # probably a good string
                     submit(browser, defaulthandle, defaultgroup,
                            splitted[0], splitted[1], info[-1], source, show, guru)
                 else:
@@ -213,24 +213,24 @@ def submit_files(browser, defaulthandle, defaultgroup, defaultcontest, defaultpr
 
         elif len(info) == 2:
             if guru:
-                """ ACMSGURU """
+                # ACMSGURU
                 submit(browser, defaulthandle, defaultgroup,
                        defaultcontest, info[0], info[1], source, show, guru)
             else:
-                """ CODEFORCES """
-                """ try to parse info[0] """
+                # CODEFORCES
+                # try to parse info[0]
                 if info[0][:2].lower() == "cf":
-                    """ remove the cf """
+                    # remove the cf
                     info[0] = info[0][2:]
                 if len(info[0]) == 1:
-                    """ only the letter, use default contest """
+                    # only the letter, use default contest
                     submit(browser, defaulthandle, defaultgroup,
                            defaultcontest, info[0], info[1], source, show, guru)
                 else:
-                    """ contest is included, so parse """
+                    # contest is included, so parse
                     splitted = re.split('(\D+)', info[0])
                     if len(splitted) == 3 and len(splitted[1]) == 1 and len(splitted[2]) == 0:
-                        """ probably good string ? """
+                        # probably good string ?
                         submit(browser, defaulthandle, defaultgroup,
                                splitted[0], splitted[1], info[1], source, show, guru)
                     else:

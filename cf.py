@@ -3,8 +3,6 @@
 import sys
 import os
 import argparse
-import re
-from robobrowser import RoboBrowser
 import cf_coach
 import cf_login
 import cf_problems
@@ -14,22 +12,22 @@ import cf_hack
 import cf_test
 import colours
 
-""" print standings """
 
+# print standings
 
 def print_standings(group, contest, verbose, top, sort, showall):
     # requires login
     browser = cf_login.login()
     if group is not None:
-        """ group contest contest """
+        # group contest contest
         url = "http://codeforces.com/group/" + group + "/contest/" + contest + "/standings"
     elif len(str(contest)) >= 6:
-        """ gym contest """
+        # gym contest
         url = "http://codeforces.com/gym/" + contest + "/standings"
     else:
-        """ codeforces round """
+        # codeforces round
         url = "http://codeforces.com/contest/" + contest + "/standings"
-    """ check if friends """
+    # check if friends
     if group is not None:
         url += "/groupmates/true"
     elif showall is False:
@@ -40,8 +38,7 @@ def print_standings(group, contest, verbose, top, sort, showall):
     cf_standings.print_st(browser.parsed, verbose, top, sort)
 
 
-""" print problem stats """
-
+# print problem stats
 
 def print_problems(group, contest, verbose, sort):
     browser = cf_login.login()
@@ -57,8 +54,7 @@ def print_problems(group, contest, verbose, sort):
     cf_problems.print_prob(browser.parsed, contest, verbose, sort)
 
 
-""" get time """
-
+# get time
 
 def print_time(group, contest):
     browser = cf_login.login()
@@ -78,11 +74,10 @@ def print_time(group, contest):
               + str(countdown_timer[0].get_text(strip=True)) + colours.reset())
 
 
-""" main """
-
+# main
 
 def main():
-    """ get default gym contest """
+    # get default gym contest
     defaultcontest = None
     defaultgroup = None
     contest_loc = os.path.join(os.path.dirname(__file__), "contestid")
@@ -95,21 +90,21 @@ def main():
         groupfile = open(group_loc, "r")
         defaultgroup = groupfile.read().rstrip('\n')
         groupfile.close()
-    """ ------------------- argparse -------------------- """
+    # ------------------- argparse --------------------
     parser = argparse.ArgumentParser(
         description="Command line tool to submit to codeforces", formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("command", help="con/gym/gcon -- change contest or gym or group contest id\n" +
-                        "ext -- change default file extension\n" +
-            "info -- current handle and contest id\n" +
-            "login -- save login info\n" +
-            "peek -- look at last submission\n" +
-                        "problems -- show number of solves on each problem\n"
-                        "standings -- show standings of friends in default contest, or specify contest with -p\n"
-                        + "submit -- submit code to problem\n"
-                        + "time -- shows time left in contest\n"
-            + "test -- tests a problem by running the code on .in and comparing with .ans\n"
-            + "watch -- watch last submission\n"
-                        + "coach -- toggle coach mode\n"
+                                        "ext -- change default file extension\n" +
+                                        "info -- current handle and contest id\n" +
+                                        "login -- save login info\n" +
+                                        "peek -- look at last submission\n" +
+                                        "problems -- show number of solves on each problem\n"
+                                        "standings -- show standings of friends in default contest, or specify contest with -p\n"
+                                        + "submit -- submit code to problem\n"
+                                        + "time -- shows time left in contest\n"
+                                        + "test -- tests a problem by running the code on .in and comparing with .ans\n"
+                                        + "watch -- watch last submission\n"
+                                        + "coach -- toggle coach mode\n"
                         )
     parser.add_argument("option",
                         nargs='*', default=None,
@@ -158,8 +153,7 @@ def main():
                         )
     args = parser.parse_args()
 
-    """ -------------------------------------------------- """
-    """ deal with short commands """
+    #deal with short commands
     if args.command == "st":
         args.command = "standings"
     elif args.command == "pb":
@@ -167,22 +161,19 @@ def main():
     if args.sort == "id":
         args.sort = "index"
 
-    """ do stuff """
+    # do stuff
     if args.command == "coach":
-        """ toggle coach mode """
+        # toggle coach mode
         if len(args.option) != 1:
             print("Bad input")
             return
         cf_coach.coach_mode(args.option[0] == "on")
     elif args.command == "gcon":
-        """ set group contest """
-        """ check if bad input """
+        # set group contest
+        # check if bad input
         if len(args.option) > 2:
             print("Bad input")
             return
-        """ keep going """
-        contest = None
-        group = None
         if len(args.option) == 2:
             group = args.option[0]
             contest = args.option[1]
@@ -199,13 +190,11 @@ def main():
         print("Contest set to " + contest)
 
     elif args.command == "gym" or args.command == "con":
-        """ set contest """
-        """ check if bad input """
+        # set contest
+        # check if bad input
         if len(args.option) > 1:
             print("Bad input")
             return
-        """ keep going """
-        contest = None
         if len(args.option) == 1:
             contest = args.option[0]
         else:
@@ -224,7 +213,6 @@ def main():
         if len(args.option) > 1:
             print("Bad input")
             return
-        defext = None
         if len(args.option) == 1:
             defext = args.option[0]
         else:
@@ -242,7 +230,7 @@ def main():
         print("contestID: " + str(defaultcontest))
 
     elif args.command == "login":
-        """ set login info """
+        # set login info
         if len(args.option) == 0:
             cf_login.set_login()
         elif len(args.option) == 1:
@@ -252,7 +240,7 @@ def main():
             return
 
     elif args.command == "peek":
-        """ look at last submission """
+        # look at last submission
         cf_submit.peek(cf_login.get_secret(False))
 
     elif args.command == "watch":
@@ -267,7 +255,7 @@ def main():
             print_time(args.group, args.contest)
 
     elif args.command == "standings":
-        """ look at standings """
+        # look at standings
         if args.contest is None and args.group is None:
             print_standings(defaultgroup, defaultcontest, args.verbose,
                             args.top, args.sort, args.all)
@@ -279,7 +267,7 @@ def main():
                             args.top, args.sort, args.all)
 
     elif args.command == "problems":
-        """ look at problem stats """
+        # look at problem stats
         if args.contest is None and args.group is None:
             print_problems(defaultgroup, defaultcontest, args.verbose, args.sort)
         elif args.contest is None:
@@ -288,16 +276,16 @@ def main():
             print_problems(args.group, args.contest, args.verbose, args.sort)
 
     elif args.command == "submit":
-        """ get default ext """
+        # get default ext
         defextension = None
         defext_loc = os.path.join(os.path.dirname(__file__), "default_ext")
         if os.path.isfile(defext_loc):
             extfile = open(defext_loc, "r")
             defextension = extfile.read().rstrip('\n')
             extfile.close()
-        """ get handle and password """
+        # get handle and password
         defaulthandle, defaultpass = cf_login.get_secret(True)
-        """ open browser """
+        # open browser
         browser = cf_login.login()
         if args.contest is not None and args.group is not None:
             defaultgroup = args.group
@@ -320,7 +308,7 @@ def main():
         defaulthandle, defaultpass = cf_login.get_secret(True)
         browser = cf_login.login()
         if browser is not None:
-            cf_hack.hack(browser,defaulthandle,defaultcontest,args.prob,args.option[0])
+            cf_hack.hack(browser, defaulthandle, defaultcontest, args.prob, args.option[0])
     elif args.command == "test":
         cf_test.test(args.option, args.verbose)
 
@@ -328,7 +316,7 @@ def main():
         print("UNKNOWN COMMAND")
 
 
-""" END """
+# END
 if __name__ == "__main__":
     try:
         main()
