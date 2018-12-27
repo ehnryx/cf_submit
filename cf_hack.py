@@ -52,7 +52,7 @@ def begin_hack(browser, contest, problem, generator, checker, correct_solution):
                     print("\nTrying to hack a " + language + " solution - " + str(submission_id) + " on page " + str(
                         i) + "...")
                     hack_process = Popen(
-                        ["timeout", "5", os.path.join(os.path.dirname(__file__), "hack_prob.sh"),
+                        ["timeout", "10", os.path.join(os.path.dirname(__file__), "hack_prob.sh"),
                          generator, checker, correct_solution, file_name, language.replace(" ", "")])
                     hack_process.wait()
                     exit_code = hack_process.returncode
