@@ -10,12 +10,6 @@ dir_path = os.getcwd()
 
 def hack(browser, contest, hack_test, submission_id):
     browser.open("https://codeforces.com/contest/" + contest + "/challenge/" + str(submission_id))
-    message = browser.find_all("div", class_="challenge-box")
-    if len(message) > 0 and \
-            re.match(r"<div class=\"challenge-box\"(.)*display: none;(.)*cursor: default;\">",
-                     str(message[0])) is not None:
-        print("Hack time ended!!")
-        return
     hack_form = browser.get_form(class_="challenge-form")
     hack_form["testcaseFromFile"] = hack_test
     browser.submit_form(hack_form)
@@ -29,6 +23,7 @@ def begin_hack(browser, contest, problem, generator, checker, correct_solution):
     init_workspace_process.wait()
     browser.open("https://codeforces.com/contest/" + contest + "/status/" + problem.upper())
     max_pages = int(browser.find_all(class_="page-index")[-1].text)
+    print(max_pages)
     print("Happy Hacking 3:)")
     for i in range(max_pages, 0, -1):
         browser.open("https://codeforces.com/contest/" + contest + "/status/" + problem.upper() + "/page/" + str(
@@ -65,12 +60,15 @@ def create_file(source, language):
     elif re.match(r"(.)*GNU(.)*", language):
         file_name = "noncorrect.c"
     elif re.match(r"(.)*Java(.)*", language):
-        tree = javalang.parse.parse(source)
-        name = next(klass.name for klass in tree.types
-                    if isinstance(klass, javalang.tree.ClassDeclaration)
-                    for m in klass.methods
-                    if m.name == 'main' and m.modifiers.issuperset({'public', 'static'}))
-        file_name = name + ".java"
+        try:
+            tree = javalang.parse.parse(source)
+            name = next(klass.name for klass in tree.types
+                        if isinstance(klass, javalang.tree.ClassDeclaration)
+                        for m in klass.methods
+                        if m.name == 'main' and m.modifiers.issuperset({'public', 'static'}))
+            file_name = name + ".java"
+        except Exception:
+            return ""
     elif re.match(r"(.)*Py(.)*", language):
         file_name = "noncorrect.py"
     else:

@@ -91,7 +91,7 @@ for i in test*.in; do
             echo "Execution error!!"
             exit -1
         fi
-        execute ${CORRECT_SOURCE} ${i} ${i/.in/.ans} &> /dev/null
+        execute ${CORRECT_SOURCE}  ${i} ${i/.in/.ans} &> /dev/null
         execute ${CHECKER} ${i} ${i/.in/.out} ${i/.in/.ans} &> /dev/null
         EXIT_CODE=$?
         if [[ ${EXIT_CODE} -ne 0 ]]; then
