@@ -97,7 +97,7 @@ for i in test*.in; do
         if [[ ${EXIT_CODE} -ne 0 ]]; then
             printf "${GREEN}"
             cat ${i} > ${FAILED_TEST}
-            echo "Hacked, YEEEAAAHH!!!"
+            echo "Can be Hacked, trying..."
             clean
             exit ${EXIT_CODE}
         fi
