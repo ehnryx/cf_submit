@@ -11,8 +11,9 @@ dir_path = os.getcwd()
 def hack(browser, contest, hack_test, submission_id):
     browser.open("https://codeforces.com/contest/" + contest + "/challenge/" + str(submission_id))
     message = browser.find_all("div", class_="challenge-box")
-    if len(message)>0 and \
-            re.match(r"<div class=\"challenge-box\"(.)*display: none;(.)*cursor: default;\">", str(message[0])) is not None:
+    if len(message) > 0 and \
+            re.match(r"<div class=\"challenge-box\"(.)*display: none;(.)*cursor: default;\">",
+                     str(message[0])) is not None:
         print("Hack time ended!!")
         return
     hack_form = browser.get_form(class_="challenge-form")
