@@ -8,7 +8,10 @@ After being able to submit from the command line, I noticed that I was wasting t
 Then I realized I would rather not navigate codeforces in my browser because looking for my mouse is a hassle, so now I can look at the number of solves for each problem in the terminal as well.
 
 # NEW
-Now you can hack submissions of both Educational and Div.3 contests, just copy your hack test into text file (ex:`hack.txt`) and use the script in this way : `cf hack hack.txt --prob a`.
+Now you can hack submissions of both Educational and Div.3 contests. You have an automatic mechanism which tries to extract a wrong answer from the target submission by executing it in parallel with a brute force solution, using a test generator and a checker code based on Codeforces checkers (of course you must write them :p).
+Example : `cf try_hack generator.cpp checker.cpp bruteforce.cpp --prob a`.
+
+You have also a direct way to have a specific submission by providing the submission ID, just copy your hack test into a text file (ex:`hack.txt`) and use the script in this way: `cf hack hack.txt 47535332`.
 
 # Warning
 The handle and password are stored.
@@ -16,11 +19,10 @@ The handle and password are stored.
 # Setup (Linux)
 1. Clone the repository. `git clone https://github.com/ehnryx/cf_submit.git`
 1. cd into the cloned repository. `cd cf_submit`
-1. Move `cf.py` to `cf` for easy typing. `mv cf.py cf`
-1. Make the python script executable. `chmod +x cf`
+1. Make the python script `cf` executable. `chmod +x cf`
 1. Edit `.bashrc` and add `cf_submit` to the `PATH`.
 
-## Dependencies
+# Dependencies
 robobrowser https://pypi.python.org/pypi/robobrowser <br />
 prettytable https://pypi.python.org/pypi/PrettyTable <br />
 
