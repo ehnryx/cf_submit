@@ -26,7 +26,7 @@ cd ${WORKSPACE_DIR}
 
 compile() {
     if [[ $1 == *.c* ]]; then
-        g++ ${1} -o ${1/.*}
+        g++ ${1} -o ${1/.*} -DONLINE_JUDGE
     elif [[ $1 == *.java ]]; then
         javac $1
     elif [[ $1 == *.py ]]; then
@@ -49,11 +49,11 @@ execute() {
         fi
     elif [[ $1 == *.java ]]; then
         if [[ $# -eq 2 ]]; then
-            java ${1/.*} $2
+            java -DONLINE_JUDGE=true ${1/.*} $2
         elif [[ $# -eq 3 ]]; then
-            java ${1/.*} < $2 > $3
+            java -DONLINE_JUDGE=true ${1/.*} < $2 > $3
         else
-            java ${1/.*} ${@:2}
+            java -DONLINE_JUDGE=true ${1/.*} ${@:2}
         fi
     elif [[ $1 == *.py ]]; then
         if [[ ${LANGUAGE} == *2* ]]; then
@@ -86,7 +86,7 @@ execute ${GENERATOR} ${TEST_NUMBERS} &> /dev/null
 
 for i in test*.in; do
     if [[ -f ${i} ]]; then
-        execute ${NOT_SURE_SOURCE} ${i} ${i/.in/.out}
+        execute ${NOT_SURE_SOURCE} ${i} ${i/.in/.out} &> /dev/null
         if [[ $? -ne 0 ]]; then
             echo "Execution error!!"
             exit -1

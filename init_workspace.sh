@@ -21,7 +21,7 @@ mkdir -p ${WORKSPACE_DIR} && rm -rf ${WORKSPACE_DIR}/*
 
 compile() {
     if [[ $1 == *.c* ]]; then
-        g++ ${1} -o ${1/.*}
+        g++ ${1} -o ${1/.*} -DONLINE_JUDGE
         mv ${1/.c*} ${WORKSPACE_DIR}
     elif [[ $1 == *.java ]]; then
         cp $1 ${WORKSPACE_DIR}
