@@ -19,7 +19,6 @@ def begin_hack(browser, contest, problem, generator, checker, correct_solution):
     init_workspace_process = Popen(
         ["/bin/bash", os.path.join(os.path.dirname(__file__), "init_workspace.sh"), generator, checker,
          correct_solution])
-    print(type(generator))
     init_workspace_process.wait()
     browser.open("https://codeforces.com/contest/" + contest + "/status/" + problem.upper())
     max_pages = int(browser.find_all(class_="page-index")[-1].text)
