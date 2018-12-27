@@ -22,10 +22,10 @@ mkdir -p ${WORKSPACE_DIR} && rm -rf ${WORKSPACE_DIR}/*
 compile() {
     if [[ $1 == *.c* ]]; then
         g++ ${1} -o ${1/.*}
-        mv ${1/.*} ${WORKSPACE_DIR}
+        mv ${1/.c*} ${WORKSPACE_DIR}
     elif [[ $1 == *.java ]]; then
-        javac $1
-        mv ${1/.*} ${WORKSPACE_DIR}
+        cp $1 ${WORKSPACE_DIR}
+        javac ${WORKSPACE_DIR}/$1
     elif [[ $1 == *.py ]]; then
         cp $1 ${WORKSPACE_DIR}
     else

@@ -1,5 +1,6 @@
 import os
 import re
+import javalang
 from subprocess import Popen
 
 dir_path = os.getcwd()
@@ -58,13 +59,18 @@ def create_file(source, language):
     elif re.match(r"(.)*GNU(.)*", language):
         file_name = "noncorrect.c"
     elif re.match(r"(.)*Java(.)*", language):
-        file_name = "noncorrect.java"
+        tree = javalang.parse.parse(source)
+        name = next(klass.name for klass in tree.types
+                    if isinstance(klass, javalang.tree.ClassDeclaration)
+                    for m in klass.methods
+                    if m.name == 'main' and m.modifiers.issuperset({'public', 'static'}))
+        file_name = name + ".java"
     elif re.match(r"(.)*Py(.)*", language):
         file_name = "noncorrect.py"
     else:
         return ""
 
-    for_hak_source = open(os.path.join(dir_path, file_name), "w")
+    for_hak_source = open(os.path.join(dir_path, "workspace", file_name), "w")
     for_hak_source.write(source)
     for_hak_source.close()
     return file_name

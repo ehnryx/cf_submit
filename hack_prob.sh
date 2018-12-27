@@ -22,15 +22,15 @@ FAILED_TEST=failed.txt
 EXIT_CODE=0
 TEST_NUMBERS=10
 
+cd ${WORKSPACE_DIR}
+
 compile() {
     if [[ $1 == *.c* ]]; then
         g++ ${1} -o ${1/.*}
-        mv ${1/.*} ${WORKSPACE_DIR}
     elif [[ $1 == *.java ]]; then
         javac $1
-        mv ${1/.*} ${WORKSPACE_DIR}
     elif [[ $1 == *.py ]]; then
-        cp $1 ${WORKSPACE_DIR}
+        continue
     else
         echo "not supported"
         clean
@@ -82,13 +82,11 @@ clean() {
 
 compile ${NOT_SURE_SOURCE} &> /dev/null
 
-cd ${WORKSPACE_DIR}
-
 execute ${GENERATOR} ${TEST_NUMBERS} &> /dev/null
 
 for i in test*.in; do
     if [[ -f ${i} ]]; then
-        execute ${NOT_SURE_SOURCE} ${i} ${i/.in/.out} &> /dev/null
+        execute ${NOT_SURE_SOURCE} ${i} ${i/.in/.out}
         if [[ $? -ne 0 ]]; then
             echo "Execution error!!"
             exit -1
