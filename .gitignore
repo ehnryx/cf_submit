@@ -11,3 +11,4 @@ default_ext
 __pycache__
 *.backup
 .idea
+tried_submissions
