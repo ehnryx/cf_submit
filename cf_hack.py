@@ -9,10 +9,13 @@ dir_path = os.getcwd()
 # Hack problems
 
 def hack(browser, contest, hack_test, submission_id):
-    browser.open("https://codeforces.com/contest/" + contest + "/challenge/" + str(submission_id))
-    hack_form = browser.get_form(class_="challenge-form")
-    hack_form["testcaseFromFile"] = hack_test
-    browser.submit_form(hack_form)
+    try:
+        browser.open("https://codeforces.com/contest/" + contest + "/challenge/" + str(submission_id))
+        hack_form = browser.get_form(class_="challenge-form")
+        hack_form["testcaseFromFile"] = hack_test
+        browser.submit_form(hack_form)
+    except Exception:
+        return
 
 
 def begin_hack(browser, contest, problem, generator, checker, correct_solution):
