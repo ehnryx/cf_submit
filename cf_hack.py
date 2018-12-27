@@ -23,7 +23,7 @@ def begin_hack(browser, contest, problem, generator, checker, correct_solution):
     browser.open("https://codeforces.com/contest/" + contest + "/status/" + problem.upper())
     max_pages = int(browser.find_all(class_="page-index")[-1].text)
     print("Happy Hacking 3:)")
-    for i in range(1,max_pages):
+    for i in range(max_pages, 0, -1):
         browser.open("https://codeforces.com/contest/" + contest + "/status/" + problem.upper() + "/page/" + str(
             i) + "?order=BY_PROGRAM_LENGTH_ASC")
         submissions = browser.find_all("table", class_="status-frame-datatable")[0].find_all("tr")[1:]
