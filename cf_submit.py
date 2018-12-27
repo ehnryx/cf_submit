@@ -177,7 +177,7 @@ def submit(browser, handle, group, contest, problem, lang, source, show, guru):
 def submit_files(browser, defaulthandle, defaultgroup, defaultcontest, defaultprob, defext, defaultlang, args, show, guru):
     # if len == 0, query for file
     if len(args) == 0:
-        args.append(raw_input("File to submit: "))
+        args.append(input('File to submit: '))
 
     for source in args:
         # split file name

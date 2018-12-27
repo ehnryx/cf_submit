@@ -3,7 +3,7 @@ from subprocess import Popen
 
 def test(args, verbose):
     if len(args) == 0:
-        args.append(raw_input("Problem to test: "))
+        args.append(input("Problem to test: "))
     option = "None"
     if verbose:
         option = "-v"

@@ -20,6 +20,10 @@ The handle and password are stored.
 1. Make the python script executable. `chmod +x cf`
 1. Edit `.bashrc` and add `cf_submit` to the `PATH`.
 
+## Dependencies
+robobrowser https://pypi.python.org/pypi/robobrowser <br />
+prettytable https://pypi.python.org/pypi/PrettyTable <br />
+
 # Uses
 ## Submissions
 - `con` or `gym` to set default contest or gym ID. Example: `cf con 844` or `cf gym 101482`
@@ -60,9 +64,6 @@ Exmaples: `cf pb -v -s id` or `cf problems -c100187 -v` <br />
 - `test` to test code on input files. Suppose we want to test problem `a`.
 Then `cf test a` will do the job. This will call `./a < a*.in > a*.out` for each file named in the form `a*.in`. Then it will compare `a*.out` with `a*.ans` ignoring differences in white space.
 
-## Dependencies
-robobrowser https://pypi.python.org/pypi/robobrowser <br />
-prettytable https://pypi.python.org/pypi/PrettyTable <br />
 
 ## Note
 This script uses python3

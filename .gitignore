@@ -6,6 +6,7 @@ cf_submit.pyc
 cf_test.pyc
 colours.pyc
 contestid
+groupid
 secret
 default_ext
 __pycache__
