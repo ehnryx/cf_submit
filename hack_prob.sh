@@ -88,8 +88,8 @@ for i in test*.in; do
     if [[ -f ${i} ]]; then
         execute ${NOT_SURE_SOURCE} ${i} ${i/.in/.out} &> /dev/null
         if [[ $? -ne 0 ]]; then
-            echo "Execution error!!"
-            exit -1
+            echo "Execution error - code $? !!"
+            exit 1
         fi
         execute ${CORRECT_SOURCE}  ${i} ${i/.in/.ans} &> /dev/null
         execute ${CHECKER} ${i} ${i/.in/.out} ${i/.in/.ans} &> /dev/null
