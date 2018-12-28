@@ -11,6 +11,7 @@ secret
 default_ext
 tried_submissions
 
+
 __pycache__
 *.backup
 .idea
