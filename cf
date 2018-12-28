@@ -154,6 +154,11 @@ def main():
                         action="store_true", default=False,
                         help="submit to acmsguru problemset"
                         )
+    parser.add_argument("-n", "--number",
+                        type=int, action="store", default=10,
+                        help="number of tests"
+                        )
+
     args = parser.parse_args()
 
     # deal with short commands
@@ -305,10 +310,9 @@ def main():
         if len(args.option) != 2:
             print("Please select hack test file and the submission id!!")
             return
-        defaulthandle, defaultpass = cf_login.get_secret(True)
         browser = cf_login.login()
         if browser is not None:
-            cf_hack.hack(browser, defaultcontest, args.option[0], args.option[1])
+            cf_hack.hack(defaultcontest, args.option[0], args.option[1])
 
     elif args.command == "try_hack":
         if len(args.option) != 3:
@@ -317,10 +321,7 @@ def main():
         if args.prob is None:
             print("Please select problem to try!!")
             return
-        defaulthandle, defaultpass = cf_login.get_secret(True)
-        browser = cf_login.login()
-        if browser is not None:
-            cf_hack.begin_hack(browser, defaultcontest, args.prob, args.option[0], args.option[1], args.option[2])
+        cf_hack.begin_hack(defaultcontest, args.prob, args.option[0], args.option[1], args.option[2], args.number)
     elif args.command == "test":
         cf_test.test(args.option, args.verbose)
 
