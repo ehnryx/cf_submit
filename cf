@@ -3,7 +3,6 @@
 import sys
 import os
 import argparse
-import cf_coach
 import cf_login
 import cf_problems
 import cf_standings
@@ -108,7 +107,6 @@ def main():
                                         + "time -- shows time left in contest\n"
                                         + "test -- tests a problem by running the code on .in and comparing with .ans\n"
                                         + "watch -- watch last submission\n"
-                                        + "coach -- toggle coach mode\n"
                         )
     parser.add_argument("option",
                         nargs='*', default=None,
@@ -171,13 +169,7 @@ def main():
         args.sort = "index"
 
     # do stuff
-    if args.command == "coach":
-        # toggle coach mode
-        if len(args.option) != 1:
-            print("Bad input")
-            return
-        cf_coach.coach_mode(args.option[0] == "on")
-    elif args.command == "gcon":
+    if args.command == "gcon":
         # set group contest
         # check if bad input
         if len(args.option) > 2:
@@ -293,6 +285,8 @@ def main():
             extfile = open(defext_loc, "r")
             defextension = extfile.read().rstrip('\n')
             extfile.close()
+        # get handle
+        defaulthandle = cf_login.get_secret(False)
         # open browser
         browser = cf_login.login()
         if args.contest is not None and args.group is not None:
