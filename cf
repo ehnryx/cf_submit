@@ -3,13 +3,13 @@
 import sys
 import os
 import argparse
+
 import cf_login
 import cf_problems
 import cf_standings
 import cf_submit
 import cf_hack
-import cf_test
-import colours
+from colors import colors
 
 
 # print standings
@@ -70,8 +70,8 @@ def print_time(group, contest):
     if len(countdown_timer) == 0:
         print("Contest " + contest + " is over")
     else:
-        print(colours.bold() + "TIME LEFT: "
-              + str(countdown_timer[0].get_text(strip=True)) + colours.reset())
+        print("%sTIME LEFT: %s%s" %
+              (colors.BOLD, str(countdown_timer[0].get_text(strip=True)), colors.ENDC))
 
 
 # main
@@ -82,6 +82,8 @@ def main():
     defaultgroup = None
     contest_loc = os.path.join(os.path.dirname(__file__), "contestid")
     group_loc = os.path.join(os.path.dirname(__file__), "groupid")
+    tried_submissions_loc = os.path.join(
+        os.path.dirname(__file__), "tried_submissions")
     if os.path.isfile(contest_loc):
         contestfile = open(contest_loc, "r")
         defaultcontest = contestfile.read().rstrip('\n')
@@ -90,23 +92,25 @@ def main():
         groupfile = open(group_loc, "r")
         defaultgroup = groupfile.read().rstrip('\n')
         groupfile.close()
+    if os.path.isfile(tried_submissions_loc) is False:
+        triedsubmissionsfile = open(tried_submissions_loc, "w")
+        triedsubmissionsfile.write("")
+        triedsubmissionsfile.close()
     # ------------------- argparse --------------------
     parser = argparse.ArgumentParser(
         description="Command line tool to submit to codeforces", formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("command", help="con/gym/gcon -- change contest or gym or group contest id\n" +
-                                        "try_hack -- try to hack all the accepted submissions for a specific given problem\n" +
-                                        "hack -- try to hack a specific submission\n" +
+                                        "hack -- try to hack all the accepted submissions for a specific given problem\n" +
                                         "ext -- change default file extension\n" +
                                         "ext -- change default file extension\n" +
                                         "info -- current handle and contest id\n" +
                                         "login -- save login info\n" +
                                         "peek -- look at last submission\n" +
                                         "problems -- show number of solves on each problem\n"
-                                        "standings -- show standings of friends in default contest, or specify contest with -p\n"
-                                        + "submit -- submit code to problem\n"
-                                        + "time -- shows time left in contest\n"
-                                        + "test -- tests a problem by running the code on .in and comparing with .ans\n"
-                                        + "watch -- watch last submission\n"
+                                        "standings -- show standings of friends in default contest, or specify contest with -p\n" +
+                                        "submit -- submit code to problem\n" +
+                                        "time -- shows time left in contest\n" +
+                                        "watch -- watch last submission\n"
                         )
     parser.add_argument("option",
                         nargs='*', default=None,
@@ -301,14 +305,6 @@ def main():
             )
 
     elif args.command == "hack":
-        if len(args.option) != 2:
-            print("Please select hack test file and the submission id!!")
-            return
-        browser = cf_login.login()
-        if browser is not None:
-            cf_hack.hack(defaultcontest, args.option[0], args.option[1])
-
-    elif args.command == "try_hack":
         if len(args.option) != 3:
             print(
                 "Please select your <generator-source> <checker-source> <answer-source> !!")
@@ -318,9 +314,6 @@ def main():
             return
         cf_hack.begin_hack(defaultcontest, args.prob,
                            args.option[0], args.option[1], args.option[2], args.number)
-    elif args.command == "test":
-        cf_test.test(args.option, args.verbose)
-
     else:
         print("UNKNOWN COMMAND")
 

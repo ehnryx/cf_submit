@@ -9,9 +9,7 @@ Then I realized I would rather not navigate codeforces in my browser because loo
 
 # NEW
 Now you can hack submissions of both Educational and Div.3 contests. You have an automatic mechanism which tries to extract a wrong answer from the target submission by executing it in parallel with a brute force solution, using a test generator and a checker code based on Codeforces checkers (of course you must write them :p).
-Example : `cf try_hack generator.cpp checker.cpp bruteforce.cpp --prob a`.
-
-You have also a direct way to have a specific submission by providing the submission ID, just copy your hack test into a text file (ex:`hack.txt`) and use the script in this way: `cf hack hack.txt 47535332`.
+Example : `cf hack generator.cpp checker.cpp bruteforce.cpp --prob a`.
 
 # Warning
 The handle and password are stored.

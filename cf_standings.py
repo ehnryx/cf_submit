@@ -1,8 +1,7 @@
 import re
-
 from prettytable import PrettyTable
 
-import colours
+from colors import colors
 
 
 def makeascii(s):
@@ -241,5 +240,5 @@ def print_st(raw_html, verbose, top, sort):
     # boldend = "\033[0;0m"
     countdown_timer = raw_html.find_all("span", class_="countdown")
     if len(countdown_timer) > 0:
-        print(colours.bold() + "TIME LEFT: " +
-              str(countdown_timer[0].get_text(strip=True)) + colours.reset())
+        print("%sTIME LEFT: %s%s" %
+              (colors.BOLD, str(countdown_timer[0].get_text(strip=True)), colors.ENDC))

@@ -1,11 +1,12 @@
 import os
 import re
+import time
 import javalang
 from subprocess import Popen
 from robobrowser import RoboBrowser
 
 import cf_login
-from colours import bcolors
+from colors import colors
 
 dir_path = os.getcwd()
 
@@ -43,7 +44,7 @@ def begin_hack(contest, problem, generator, checker, correct_solution, test_numb
                  contest + "/status/" + problem.upper())
     max_pages = int(browser.find_all(class_="page-index")[-1].text)
     print("\n%sHappy Hacking 3:) - max pages : %d%s" %
-          (bcolors.HEADER, max_pages, bcolors.ENDC))
+          (colors.HEADER, max_pages, colors.ENDC))
     for i in range(1, max_pages+1):
         try:
             browser = RoboBrowser(parser="lxml")
@@ -56,8 +57,8 @@ def begin_hack(contest, problem, generator, checker, correct_solution, test_numb
                     "td", class_="id-cell").find("a").text)
                 tried_solutions = tried_solutions + 1
                 if submission_id in tried_submissions:
-                    print("%sSubmission %d on page %d/%d already tried!!%s" %
-                          (bcolors.WARNING, submission_id, i, max_pages, bcolors.ENDC))
+                    print("\n%sSubmission %d on page %d/%d already tried!!%s" %
+                          (colors.WARNING, submission_id, i, max_pages, colors.ENDC))
                     continue
                 tried_submissions_list.write(str(submission_id) + " ")
                 tried_submissions_list.flush()
@@ -73,11 +74,11 @@ def begin_hack(contest, problem, generator, checker, correct_solution, test_numb
                     if file_name == "":
                         continue
                     print("\n%sHacked : %d, %sFailed : %d, %sTotal : %d%s"
-                          % (bcolors.OKGREEN, hacked_solutions, bcolors.FAIL,
+                          % (colors.OKGREEN, hacked_solutions, colors.FAIL,
                              tried_solutions-hacked_solutions,
-                             bcolors.OKBLUE, tried_solutions, bcolors.ENDC))
+                             colors.OKBLUE, tried_solutions, colors.ENDC))
                     print("%sTrying to hack a %s solution - %d on page %d/%d...%s"
-                          % (bcolors.HEADER, language, submission_id, i, max_pages, bcolors.ENDC))
+                          % (colors.HEADER, language, submission_id, i, max_pages, colors.ENDC))
                     hack_process = Popen(
                         ["timeout", "10", os.path.join(os.path.dirname(__file__), "hack_prob.sh"),
                          generator, checker, correct_solution, file_name, language.replace(" ", ""), str(test_number)])
@@ -85,20 +86,23 @@ def begin_hack(contest, problem, generator, checker, correct_solution, test_numb
                     exit_code = hack_process.returncode
                     if exit_code in [0, 255]:
                         print("%sSorry, can't hack this solution x/" %
-                              (bcolors.FAIL))
+                              (colors.FAIL))
                     else:
                         test_hack_loc = os.path.join(
                             dir_path, "workspace", "failed.txt")
                         if os.path.isfile(test_hack_loc):
                             print("%sHope that will win 3:)%s" %
-                                  (bcolors.OKGREEN, bcolors.ENDC))
+                                  (colors.OKGREEN, colors.ENDC))
                             hacked_solutions = hacked_solutions + 1
                             hack(contest, test_hack_loc, submission_id)
+        except KeyboardInterrupt:
+            time.sleep(2)
+            break
         except Exception:
             continue
     print("\n%sRESULT => %sHacked : %d, %sFailed : %d, %sTotal : %d"
-          % (bcolors.HEADER, bcolors.OKGREEN, hacked_solutions, bcolors.FAIL,
-             tried_solutions-hacked_solutions, bcolors.OKBLUE, tried_solutions))
+          % (colors.HEADER, colors.OKGREEN, hacked_solutions, colors.FAIL,
+             tried_solutions-hacked_solutions, colors.OKBLUE, tried_solutions))
 
 
 def create_file(source, language):

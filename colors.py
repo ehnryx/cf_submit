@@ -1,12 +1,4 @@
-def reset():
-    return "\033[0;0m"
-
-
-def bold():
-    return "\033[1m"
-
-
-class bcolors:
+class colors:
     HEADER = '\033[95m'
     OKBLUE = '\033[94m'
     OKGREEN = '\033[92m'

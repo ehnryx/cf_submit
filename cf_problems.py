@@ -1,6 +1,6 @@
 from prettytable import PrettyTable
 
-import colours
+from colors import colors
 
 
 def print_prob(raw_html, contest, verbose, sort):
@@ -41,5 +41,5 @@ def print_prob(raw_html, contest, verbose, sort):
     countdown_id = "contest-state-regular countdown before-contest-" + contest + "-finish"
     countdown_timer = raw_html.find_all("span", class_=countdown_id)
     if len(countdown_timer) > 0:
-        print(colours.bold() + "TIME LEFT: " +
-              str(countdown_timer[0].get_text(strip=True)) + colours.reset())
+        print("%sTIME LEFT: %s%s" %
+              (colors.BOLD, str(countdown_timer[0].get_text(strip=True)), colors.ENDC))
