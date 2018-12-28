@@ -179,10 +179,12 @@ def print_st(raw_html, verbose, top, sort):
                         if len(tablerow[i]) != 0 and tablerow[i][0] == "+":
                             handledict[party][solvecol] += 1
                     elif handledict[party][i][0] != '+' and len(tablerow[i]) != 0:
-                        totalwa = int(handledict[party][i].split('\n')[0].split('-')[1])
+                        totalwa = int(handledict[party][i].split(
+                            '\n')[0].split('-')[1])
                         if tablerow[i].find('-') != -1:
                             # add wa
-                            totalwa += int(tablerow[i].split('\n')[0].split('-')[1])
+                            totalwa += int(tablerow[i].split('\n')
+                                           [0].split('-')[1])
                             handledict[party][i] = "WA-" + str(totalwa)
                         else:
                             # add wa to correct submission
@@ -217,7 +219,8 @@ def print_st(raw_html, verbose, top, sort):
                 if len(rowinfo[fields["Penalty"]]) == 0:
                     sortvalue = 100000 * sortvalue - 99999
                 else:
-                    sortvalue = 100000 * sortvalue - int(rowinfo[fields["Penalty"]])
+                    sortvalue = 100000 * sortvalue - \
+                        int(rowinfo[fields["Penalty"]])
             rowinfo.append(sortvalue)
             standings.add_row(rowinfo)
         # print
@@ -238,4 +241,5 @@ def print_st(raw_html, verbose, top, sort):
     # boldend = "\033[0;0m"
     countdown_timer = raw_html.find_all("span", class_="countdown")
     if len(countdown_timer) > 0:
-        print(colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset())
+        print(colours.bold() + "TIME LEFT: " +
+              str(countdown_timer[0].get_text(strip=True)) + colours.reset())

@@ -54,11 +54,11 @@ def begin_hack(contest, problem, generator, checker, correct_solution, test_numb
             for submission in submissions:
                 submission_id = int(submission.find(
                     "td", class_="id-cell").find("a").text)
+                tried_solutions = tried_solutions + 1
                 if submission_id in tried_submissions:
                     print("%sSubmission %d on page %d/%d already tried!!%s" %
                           (bcolors.WARNING, submission_id, i, max_pages, bcolors.ENDC))
                     continue
-                tried_solutions = tried_solutions + 1
                 tried_submissions_list.write(str(submission_id) + " ")
                 tried_submissions_list.flush()
                 language = submission.find_all(

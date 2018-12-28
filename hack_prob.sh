@@ -6,8 +6,8 @@ if [[ $# -ne 6 ]]; then
     exit -1
 fi
 
-GREEN='\033[1;32m'
-YELLOW='\033[1;33m'
+GREEN='\033[32m'
+YELLOW='\033[33m'
 NC='\033[0m'
 
 printf "${YELLOW}"
@@ -100,11 +100,15 @@ for i in test*.in; do
         execute ${NOT_SURE_SOURCE} ${i} ${i/.in/.out} &> /dev/null
         EXIT_CODE=$?
         if [[ ${EXIT_CODE} -ne 0 ]]; then
-            printf "${GREEN}"
+            printf "${YELLOW}"
             echo "Execution error - code $EXIT_CODE !!"
             echo -en "\007"
             clean
-            exit 1
+            if [[ ${EXIT_CODE} -eq -1 ]]; then
+                exit -1
+            else
+                exit 1
+            fi
         fi
         execute ${CORRECT_SOURCE}  ${i} ${i/.in/.ans} &> /dev/null
         execute ${CHECKER} ${i} ${i/.in/.out} ${i/.in/.ans} &> /dev/null
@@ -112,15 +116,15 @@ for i in test*.in; do
         if [[ ${EXIT_CODE} -ne 0 ]]; then
             printf "${GREEN}"
             cat ${i} > ${FAILED_TEST}
-            echo "Can be Hacked, trying..."
-	    echo -en "\007"
+            echo "Can be Hacked"
+	        echo -en "\007"
             clean
             exit ${EXIT_CODE}
         fi
     fi
 done
 
-echo "$TEST_NUMBERS tests passed :/"
+echo "All tests passed!!"
 
 clean
 

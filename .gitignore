@@ -13,4 +13,4 @@ tried_submissions
 
 __pycache__
 *.backup
-.idea
+.vscode

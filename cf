@@ -20,7 +20,8 @@ def print_standings(group, contest, verbose, top, sort, showall):
     browser = cf_login.login()
     if group is not None:
         # group contest contest
-        url = "http://codeforces.com/group/" + group + "/contest/" + contest + "/standings"
+        url = "http://codeforces.com/group/" + \
+            group + "/contest/" + contest + "/standings"
     elif len(str(contest)) >= 6:
         # gym contest
         url = "http://codeforces.com/gym/" + contest + "/standings"
@@ -277,7 +278,8 @@ def main():
     elif args.command == "problems":
         # look at problem stats
         if args.contest is None and args.group is None:
-            print_problems(defaultgroup, defaultcontest, args.verbose, args.sort)
+            print_problems(defaultgroup, defaultcontest,
+                           args.verbose, args.sort)
         elif args.contest is None:
             print_problems(args.group, defaultcontest, args.verbose, args.sort)
         else:
@@ -291,8 +293,6 @@ def main():
             extfile = open(defext_loc, "r")
             defextension = extfile.read().rstrip('\n')
             extfile.close()
-        # get handle and password
-        defaulthandle, defaultpass = cf_login.get_secret(True)
         # open browser
         browser = cf_login.login()
         if args.contest is not None and args.group is not None:
@@ -316,12 +316,14 @@ def main():
 
     elif args.command == "try_hack":
         if len(args.option) != 3:
-            print("Please select your <generator-source> <checker-source> <answer-source> !!")
+            print(
+                "Please select your <generator-source> <checker-source> <answer-source> !!")
             return
         if args.prob is None:
             print("Please select problem to try!!")
             return
-        cf_hack.begin_hack(defaultcontest, args.prob, args.option[0], args.option[1], args.option[2], args.number)
+        cf_hack.begin_hack(defaultcontest, args.prob,
+                           args.option[0], args.option[1], args.option[2], args.number)
     elif args.command == "test":
         cf_test.test(args.option, args.verbose)
 

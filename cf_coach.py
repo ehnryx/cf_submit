@@ -7,14 +7,16 @@ def coach_mode(coach_on):
     raw_html = str(browser.parsed)
     if coach_on:
         if raw_html.find("Enable coach mode") != -1:
-            toggle_form = browser.get_form(class_="toggleGymContestsManagerEnabled")
+            toggle_form = browser.get_form(
+                class_="toggleGymContestsManagerEnabled")
             browser.submit_form(toggle_form)
             print("Coach Mode On")
         else:
             print("Coach Mode is already On")
     else:
         if raw_html.find("Disable coach mode") != -1:
-            toggle_form = browser.get_form(class_="toggleGymContestsManagerEnabled")
+            toggle_form = browser.get_form(
+                class_="toggleGymContestsManagerEnabled")
             browser.submit_form(toggle_form)
             print("Coach Mode Off")
         else:
