@@ -38,10 +38,10 @@ compile() {
     fi
 }
 
-compile ${SMALL_GENERATOR} 
-compile ${BIG_GENERATOR} 
-compile ${CHECKER} 
-compile ${CORRECT_SOURCE} 
+compile ${SMALL_GENERATOR}  &> /dev/null
+compile ${BIG_GENERATOR}  &> /dev/null
+compile ${CHECKER}  &> /dev/null
+compile ${CORRECT_SOURCE}  &> /dev/null
 
 echo "Workspace is ready!!"
 printf "${NC}"

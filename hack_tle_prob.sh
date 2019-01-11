@@ -27,21 +27,15 @@ cd ${WORKSPACE_DIR}
 
 compile() {
     if [[ $1 == *.cpp ]]; then
-        if [[ $2 == *11* ]]; then
-            g++ ${1} -static -DONLINE_JUDGE -lm -s -x c++ -Wl,--stack=268435456 -O2 -std=c++11 -o ${1/.*}
-        elif [[ $2 == *14* ]]; then
-            g++ ${1} -static -DONLINE_JUDGE -lm -s -x c++ -Wl,--stack=268435456 -O2 -std=c++14 -o ${1/.*}
-        elif [[ $2 == *17* ]]; then
-            g++ ${1} -static -DONLINE_JUDGE -lm -s -x c++ -Wl,--stack=268435456 -O2 -std=c++17 -o ${1/.*}
-        else
-            g++ ${1} -static -DONLINE_JUDGE -lm -s -x c++ -Wl,--stack=268435456 -O2 -o ${1/.*}
-        fi
+        g++ ${1} -DONLINE_JUDGE -o ${1/.*}
     elif [[ $1 == *.c ]]; then
-        gcc -static -fno-optimize-sibling-calls -fno-strict-aliasing -DONLINE_JUDGE -fno-asm -lm -s -Wl,--stack=268435456 -O2 -o ${1/.*}
+        echo "${2} c"
+        gcc ${1} -DONLINE_JUDGE -o ${1/.*}
     elif [[ $1 == *.java ]]; then
+        echo "${2} java"
         javac $1
     elif [[ $1 == *.py ]]; then
-        return
+        echo "${2} python"
     else
         echo "not supported"
         clean
@@ -100,7 +94,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 if [[ -f ${TEST_TLE} ]]; then
-    execute ${NOT_SURE_SOURCE} ${TEST_TLE} ${TEST_TLE/.in/.out} &> /dev/null
+    execute ${NOT_SURE_SOURCE} test_tle.in test_tle.out &> /dev/null
     EXIT_CODE=$?
     if [[ ${EXIT_CODE} -ne 0 ]]; then
         printf "${YELLOW}"
@@ -112,8 +106,8 @@ if [[ -f ${TEST_TLE} ]]; then
             exit 1
         fi
     fi
-    execute ${CORRECT_SOURCE} ${TEST_TLE} ${TEST_TLE/.in/.ans} &> /dev/null
-    execute ${CHECKER} ${TEST_TLE} ${TEST_TLE/.in/.out} ${TEST_TLE/.in/.ans} &> /dev/null
+    execute ${CORRECT_SOURCE} test_tle.in test_tle.ans &> /dev/null
+    execute ${CHECKER} test_tle.in test_tle.out test_tle.ans
     EXIT_CODE=$?
     if [[ ${EXIT_CODE} -ne 0 ]]; then
         printf "${GREEN}"

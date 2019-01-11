@@ -27,21 +27,15 @@ cd ${WORKSPACE_DIR}
 
 compile() {
     if [[ $1 == *.cpp ]]; then
-        if [[ $2 == *11* ]]; then
-            g++ ${1} -static -DONLINE_JUDGE -lm -s -x c++ -Wl,--stack=268435456 -O2 -std=c++11 -o ${1/.*}
-        elif [[ $2 == *14* ]]; then
-            g++ ${1} -static -DONLINE_JUDGE -lm -s -x c++ -Wl,--stack=268435456 -O2 -std=c++14 -o ${1/.*}
-        elif [[ $2 == *17* ]]; then
-            g++ ${1} -static -DONLINE_JUDGE -lm -s -x c++ -Wl,--stack=268435456 -O2 -std=c++17 -o ${1/.*}
-        else
-            g++ ${1} -static -DONLINE_JUDGE -lm -s -x c++ -Wl,--stack=268435456 -O2 -o ${1/.*}
-        fi
+        g++ ${1} -DONLINE_JUDGE -o ${1/.*}
     elif [[ $1 == *.c ]]; then
-        gcc -static -fno-optimize-sibling-calls -fno-strict-aliasing -DONLINE_JUDGE -fno-asm -lm -s -Wl,--stack=268435456 -O2 -o ${1/.*}
+        echo "${2} c"
+        gcc ${1} -DONLINE_JUDGE -o ${1/.*}
     elif [[ $1 == *.java ]]; then
+        echo "${2} java"
         javac $1
     elif [[ $1 == *.py ]]; then
-        continue
+        echo "${2} python"
     else
         echo "not supported"
         clean
@@ -101,16 +95,13 @@ for i in test*.in; do
         EXIT_CODE=$?
         if [[ ${EXIT_CODE} -ne 0 ]]; then
             printf "${YELLOW}"
+            echo "error ${EXIT_CODE}"
             echo -en "\007"
             clean
-            if [[ ${EXIT_CODE} -eq -1 ]]; then
-                exit -1
-            else
-                exit 1
-            fi
+            exit -1
         fi
         execute ${CORRECT_SOURCE} ${i} ${i/.in/.ans} &> /dev/null
-        execute ${CHECKER} ${i} ${i/.in/.out} ${i/.in/.ans} &> /dev/null
+        execute ${CHECKER} ${i} ${i/.in/.out} ${i/.in/.ans}
         EXIT_CODE=$?
         if [[ ${EXIT_CODE} -ne 0 ]]; then
             printf "${GREEN}"

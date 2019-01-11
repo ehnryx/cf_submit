@@ -32,7 +32,7 @@ def hack_big_test(contest, hack_gen, submission_id):
     browser.submit_form(hack_form)
 
 
-def begin_hack(contest, problem, small_generator, big_generator, checker, correct_solution, test_number, time_limit):
+def begin_hack(contest, problem, small_generator, big_generator, checker, correct_solution, test_number):
     global file_name
     hacked_solutions = 0
     tried_solutions = 0
@@ -58,7 +58,7 @@ def begin_hack(contest, problem, small_generator, big_generator, checker, correc
     max_pages = int(browser.find_all(class_="page-index")[-1].text)
     print("\n%sHappy Hacking 3:) - max pages : %d%s" %
           (colors.HEADER, max_pages, colors.ENDC))
-    for i in range(1, max_pages+1):
+    for i in range(max_pages, 0, -1):
         try:
             browser = RoboBrowser(parser="lxml")
             browser.open("https://codeforces.com/contest/%s/status/%s/page/%d?order=BY_PROGRAM_LENGTH_ASC"
@@ -94,23 +94,22 @@ def begin_hack(contest, problem, small_generator, big_generator, checker, correc
                           % (colors.HEADER, language, submission_id, i, max_pages, colors.ENDC))
 
                     # Try Big Tests
-                    hack_process = Popen(
-                        ["timeout", str(int(time_limit)+2), os.path.join(os.path.dirname(__file__), "hack_tle_prob.sh"),
-                         big_generator, checker, correct_solution, file_name, language.replace(" ", "")])
-                    hack_process.wait()
-                    exit_code = hack_process.returncode
-                    if exit_code in [0, 255]:
-                        print("%sSorry, can't hack this solution with big tests x/" %
-                              (colors.FAIL))
-                    else:
-                        test_gen_loc = os.path.join(
-                            dir_path, big_generator)
-                        if os.path.isfile(test_gen_loc):
-                            print("%sHope that will win 3:)%s" %
-                                  (colors.OKGREEN, colors.ENDC))
-                            hacked_solutions = hacked_solutions + 1
-                            hack_big_test(contest, test_gen_loc, submission_id)
-                        continue
+                    # hack_process = Popen(
+                    #     ["timeout", "10", os.path.join(os.path.dirname(__file__), "hack_tle_prob.sh"),
+                    #      big_generator, checker, correct_solution, file_name, language.replace(" ", "")])
+                    # hack_process.wait()
+                    # exit_code = hack_process.returncode
+                    # if exit_code in [0, 255]:
+                    #     print("%sSorry, can't hack this solution with big tests x/" %
+                    #           (colors.FAIL))
+                    # else:
+                    #     test_gen_loc = os.path.join(dir_path, big_generator)
+                    #     if os.path.isfile(test_gen_loc):
+                    #         print("%sHope that will win 3:)%s" %
+                    #               (colors.OKGREEN, colors.ENDC))
+                    #         hacked_solutions = hacked_solutions + 1
+                    #         hack_big_test(contest, test_gen_loc, submission_id)
+                    #     continue
 
                     # Try Small Tests
                     hack_process = Popen(
