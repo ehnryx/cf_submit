@@ -161,6 +161,10 @@ def main():
                         type=int, action="store", default=10,
                         help="number of tests"
                         )
+    parser.add_argument("--timelimit",
+                        type=int, action="store", default=10,
+                        help="time limit"
+                        )
 
     args = parser.parse_args()
 
@@ -305,15 +309,21 @@ def main():
             )
 
     elif args.command == "hack":
-        if len(args.option) != 3:
+        if len(args.option) != 4:
             print(
-                "Please select your <generator-source> <checker-source> <answer-source> !!")
+                "Please select your <small-generator-source> <big-generator-source> <checker-source> <answer-source> !!")
             return
         if args.prob is None:
             print("Please select problem to try!!")
             return
-        cf_hack.begin_hack(defaultcontest, args.prob,
-                           args.option[0], args.option[1], args.option[2], args.number)
+        if args.number is None:
+            print("Please specify the number of test cases to try!!")
+            return
+        if args.prob is None:
+            print("Please specify the time limit of the problem!!")
+            return
+        cf_hack.begin_hack(defaultcontest, args.prob, args.option[0], args.option[1],
+                           args.option[2], args.option[3], args.number, args.timelimit)
     else:
         print("UNKNOWN COMMAND")
 

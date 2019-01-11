@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [[ $# -ne 6 ]]; then
+if [[ $# -ne 5 ]]; then
     echo "Program must be run with the following arguments: <generator-source> <checker-source> <answer-source>
-                <for-hack-source> <for-hack-source-language> <test-number>"
+                <for-hack-source> <for-hack-source-language>"
     exit -1
 fi
 
@@ -17,10 +17,10 @@ CHECKER=$2
 CORRECT_SOURCE=$3
 NOT_SURE_SOURCE=$4
 LANGUAGE=$5
-TEST_NUMBERS=$6
 
 WORKSPACE_DIR=workspace
 FAILED_TEST=failed.txt
+TEST_TLE=test_tle.in
 EXIT_CODE=0
 
 cd ${WORKSPACE_DIR}
@@ -41,7 +41,7 @@ compile() {
     elif [[ $1 == *.java ]]; then
         javac $1
     elif [[ $1 == *.py ]]; then
-        continue
+        return
     else
         echo "not supported"
         clean
@@ -87,40 +87,42 @@ execute() {
 }
 
 clean() {
-    rm -rf test*.in test*.out test*.ans
+    rm -rf test_tle.in test_tle.out test_tle.ans
     printf "${NC}"
 }
 
 compile ${NOT_SURE_SOURCE} ${LANGUAGE} &> /dev/null
 
-execute ${GENERATOR} ${TEST_NUMBERS} &> /dev/null
+execute ${GENERATOR} 1 > ${TEST_TLE}
 
-for i in test*.in; do
-    if [[ -f ${i} ]]; then
-        execute ${NOT_SURE_SOURCE} ${i} ${i/.in/.out} &> /dev/null
-        EXIT_CODE=$?
-        if [[ ${EXIT_CODE} -ne 0 ]]; then
-            printf "${YELLOW}"
-            echo -en "\007"
-            clean
-            if [[ ${EXIT_CODE} -eq -1 ]]; then
-                exit -1
-            else
-                exit 1
-            fi
-        fi
-        execute ${CORRECT_SOURCE} ${i} ${i/.in/.ans} &> /dev/null
-        execute ${CHECKER} ${i} ${i/.in/.out} ${i/.in/.ans} &> /dev/null
-        EXIT_CODE=$?
-        if [[ ${EXIT_CODE} -ne 0 ]]; then
-            printf "${GREEN}"
-            cat ${i} > ${FAILED_TEST}
-	        echo -en "\007"
-            clean
-            exit ${EXIT_CODE}
+if [[ $? -ne 0 ]]; then
+    exit ${EXIT_CODE};
+fi
+
+if [[ -f ${TEST_TLE} ]]; then
+    execute ${NOT_SURE_SOURCE} ${TEST_TLE} ${TEST_TLE/.in/.out} &> /dev/null
+    EXIT_CODE=$?
+    if [[ ${EXIT_CODE} -ne 0 ]]; then
+        printf "${YELLOW}"
+        echo -en "\007"
+        clean
+        if [[ ${EXIT_CODE} -eq -1 ]]; then
+            exit -1
+        else
+            exit 1
         fi
     fi
-done
+    execute ${CORRECT_SOURCE} ${TEST_TLE} ${TEST_TLE/.in/.ans} &> /dev/null
+    execute ${CHECKER} ${TEST_TLE} ${TEST_TLE/.in/.out} ${TEST_TLE/.in/.ans} &> /dev/null
+    EXIT_CODE=$?
+    if [[ ${EXIT_CODE} -ne 0 ]]; then
+        printf "${GREEN}"
+        cat ${i} > ${FAILED_TEST}
+        echo -en "\007"
+        clean
+        exit ${EXIT_CODE}
+    fi
+fi
 
 clean
 
