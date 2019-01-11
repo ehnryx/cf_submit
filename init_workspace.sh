@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [[ $# -ne 4 ]]; then
-    echo "Program must be run with the following arguments: <small-generator-source> <big-generator-source> <checker-source> <answer-source>"
+if [[ $# -ne 3 ]]; then
+    echo "Program must be run with the following arguments:<generator-source> <checker-source> <answer-source>"
     exit -1
 fi
 
@@ -11,10 +11,9 @@ NC='\033[0m'
 printf "${GREEN}"
 echo "Initializing workspace..."
 
-SMALL_GENERATOR=$1
-BIG_GENERATOR=$2
-CHECKER=$3
-CORRECT_SOURCE=$4
+GENERATOR=$1
+CHECKER=$2
+CORRECT_SOURCE=$3
 
 WORKSPACE_DIR=workspace
 
@@ -38,8 +37,7 @@ compile() {
     fi
 }
 
-compile ${SMALL_GENERATOR}  &> /dev/null
-compile ${BIG_GENERATOR}  &> /dev/null
+compile ${GENERATOR}  &> /dev/null
 compile ${CHECKER}  &> /dev/null
 compile ${CORRECT_SOURCE}  &> /dev/null
 

@@ -22,24 +22,14 @@ def hack(contest, hack_test, submission_id):
     browser.submit_form(hack_form)
 
 
-def hack_big_test(contest, hack_gen, submission_id):
-    browser = cf_login.login()
-    browser.open("https://codeforces.com/contest/" +
-                 contest + "/challenge/" + str(submission_id))
-    hack_form = browser.get_form(class_="challenge-form")
-    hack_form["programTypeId"] = "50"
-    hack_form["generatorSourceFileField"] = hack_gen
-    browser.submit_form(hack_form)
-
-
-def begin_hack(contest, problem, small_generator, big_generator, checker, correct_solution, test_number):
+def begin_hack(contest, problem, generator, checker, correct_solution, test_number):
     global file_name
     hacked_solutions = 0
     tried_solutions = 0
 
     # Preparing Workspace
     init_workspace_process = Popen(
-        ["/bin/bash", os.path.join(os.path.dirname(__file__), "init_workspace.sh"), small_generator, big_generator,
+        ["/bin/bash", os.path.join(os.path.dirname(__file__), "init_workspace.sh"), generator,
          checker, correct_solution])
     tried_submissions_list = open(os.path.join(
         os.path.dirname(__file__), "tried_submissions"), "r")
@@ -93,32 +83,13 @@ def begin_hack(contest, problem, small_generator, big_generator, checker, correc
                     print("%sTrying to hack a %s solution - %d on page %d/%d...%s"
                           % (colors.HEADER, language, submission_id, i, max_pages, colors.ENDC))
 
-                    # Try Big Tests
-                    # hack_process = Popen(
-                    #     ["timeout", "10", os.path.join(os.path.dirname(__file__), "hack_tle_prob.sh"),
-                    #      big_generator, checker, correct_solution, file_name, language.replace(" ", "")])
-                    # hack_process.wait()
-                    # exit_code = hack_process.returncode
-                    # if exit_code in [0, 255]:
-                    #     print("%sSorry, can't hack this solution with big tests x/" %
-                    #           (colors.FAIL))
-                    # else:
-                    #     test_gen_loc = os.path.join(dir_path, big_generator)
-                    #     if os.path.isfile(test_gen_loc):
-                    #         print("%sHope that will win 3:)%s" %
-                    #               (colors.OKGREEN, colors.ENDC))
-                    #         hacked_solutions = hacked_solutions + 1
-                    #         hack_big_test(contest, test_gen_loc, submission_id)
-                    #     continue
-
-                    # Try Small Tests
                     hack_process = Popen(
                         ["timeout", "10", os.path.join(os.path.dirname(__file__), "hack_prob.sh"),
-                         small_generator, checker, correct_solution, file_name, language.replace(" ", ""), str(test_number)])
+                         generator, checker, correct_solution, file_name, language.replace(" ", ""), str(test_number)])
                     hack_process.wait()
                     exit_code = hack_process.returncode
                     if exit_code in [0, 255]:
-                        print("%sSorry, can't hack this solution with small tests x/" %
+                        print("%sSorry, can't hack this solution x/" %
                               (colors.FAIL))
                     else:
                         test_hack_loc = os.path.join(
