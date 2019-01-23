@@ -48,7 +48,7 @@ def begin_hack(contest, problem, generator, checker, correct_solution, test_numb
     max_pages = int(browser.find_all(class_="page-index")[-1].text)
     print("\n%sHappy Hacking 3:) - max pages : %d%s" %
           (colors.HEADER, max_pages, colors.ENDC))
-    for i in range(max_pages, 0, -1):
+    for i in range(1, max_pages+1):
         try:
             browser = RoboBrowser(parser="lxml")
             browser.open("https://codeforces.com/contest/%s/status/%s/page/%d?order=BY_PROGRAM_LENGTH_ASC"
@@ -84,7 +84,7 @@ def begin_hack(contest, problem, generator, checker, correct_solution, test_numb
                           % (colors.HEADER, language, submission_id, i, max_pages, colors.ENDC))
 
                     hack_process = Popen(
-                        ["timeout", "10", os.path.join(os.path.dirname(__file__), "hack_prob.sh"),
+                        ["timeout", "120", os.path.join(os.path.dirname(__file__), "hack_prob.sh"),
                          generator, checker, correct_solution, file_name, language.replace(" ", ""), str(test_number)])
                     hack_process.wait()
                     exit_code = hack_process.returncode
