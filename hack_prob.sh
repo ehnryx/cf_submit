@@ -96,9 +96,13 @@ for i in test*.in; do
         if [[ ${EXIT_CODE} -ne 0 ]]; then
             printf "${YELLOW}"
             echo "error ${EXIT_CODE}"
-            echo -en "\007"
+            cat ${i} > ${FAILED_TEST}
+	        echo -en "\007"
             clean
-            exit -1
+            if [[ ${i} == "test0.in" ]]; then
+                exit -1
+            fi
+            exit 1
         fi
         execute ${CORRECT_SOURCE} ${i} ${i/.in/.ans} &> /dev/null
         execute ${CHECKER} ${i} ${i/.in/.out} ${i/.in/.ans}
