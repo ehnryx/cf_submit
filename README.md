@@ -37,6 +37,7 @@ prettytable https://pypi.python.org/pypi/PrettyTable <br />
 - `login` to store login info (username and password), will prompt you to enter password. Example: `cf login` or `cf login <your handle>`
 - `info` to show stored handle and contest id. Example: `cf info`
 - `time` to show time left in contest
+- `open` to open the selected problem in the browser
 
 Examples: `cf submit code.cpp -p844a -w` <br />
 
