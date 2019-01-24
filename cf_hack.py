@@ -48,7 +48,7 @@ def begin_hack(contest, problem, generator, checker, correct_solution, test_numb
     max_pages = int(browser.find_all(class_="page-index")[-1].text)
     print("\n%sHappy Hacking 3:) - max pages : %d%s" %
           (colors.HEADER, max_pages, colors.ENDC))
-    for i in range(max_pages,0,-1):
+    for i in range(max_pages, 0, -1):
         try:
             browser = RoboBrowser(parser="lxml")
             browser.open("https://codeforces.com/contest/%s/status/%s/page/%d?order=BY_ARRIVED_DESC"
