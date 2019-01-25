@@ -11,6 +11,8 @@ import cf_problems
 import cf_standings
 import cf_submit
 import cf_hack
+import cf_parse
+import cf_test
 from colors import colors
 
 
@@ -306,7 +308,23 @@ def main():
                 browser, defaulthandle, defaultgroup, defaultcontest, args.prob, defextension,
                 args.lang, args.option, args.watch, args.guru
             )
-
+    elif args.command == "test":
+        if not os.path.isdir("files"):
+            print("Please import problem testcases first by:\n\tcf parse -p a")
+            return
+        if len(args.option)==0:
+            print("Please select the source file")
+            return
+        cf_test.test(args.option[0], args.lang)
+    elif args.command == "parse":
+        if args.prob is None:
+            print("Please select problem to parse!!")
+            return
+        if len(args.prob) < 3:
+            cf_parse.parse(defaultcontest, str(args.prob).upper())
+        else:
+            splitted = re.split(r"(\D+)", args.prob)
+            cf_parse.parse(splitted[0], str(splitted[1]+splitted[2]).upper())
     elif args.command == "open":
         if args.prob is None:
             print("Please select problem to open!!")
