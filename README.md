@@ -7,7 +7,7 @@ After being able to submit from the command line, I noticed that I was wasting t
 
 Then I realized I would rather not navigate codeforces in my browser because looking for my mouse is a hassle, so now I can look at the number of solves for each problem in the terminal as well.
 
-#NEW
+# NEW
 Now you can parse all the problem samples and then test your code source by command line.
 Examples: 
 - `cf parse -p 1108a` or `cf parse -p a` <br />
