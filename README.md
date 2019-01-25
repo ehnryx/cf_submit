@@ -7,9 +7,11 @@ After being able to submit from the command line, I noticed that I was wasting t
 
 Then I realized I would rather not navigate codeforces in my browser because looking for my mouse is a hassle, so now I can look at the number of solves for each problem in the terminal as well.
 
-# NEW
-Now you can hack submissions of both Educational and Div.3 contests. You have an automatic mechanism which tries to extract a wrong answer from the target submission by executing it in parallel with a brute force solution, using a test generator and a checker code based on Codeforces checkers (of course you must write them :p).
-Example : `cf hack generator.cpp checker.cpp bruteforce.cpp --prob a`.
+#NEW
+Now you can parse all the problem samples and then test your code source by command line.
+Examples: 
+- `cf parse -p 1108a` or `cf parse -p a` <br />
+- `cf test main.cpp`, you should specify the version for python (use `-l py2|py3`) <br />
 
 # Warning
 The handle and password are stored.
@@ -61,10 +63,12 @@ Examples: `cf st -v -t7` or `cf standings -c844 -v -a` <br />
 
 Exmaples: `cf pb -v -s id` or `cf problems -c100187 -v` <br />
 
-## Testing (Linux)
-- `test` to test code on input files. Suppose we want to test problem `a`.
-Then `cf test a` will do the job. This will call `./a < a*.in > a*.out` for each file named in the form `a*.in`. Then it will compare `a*.out` with `a*.ans` ignoring differences in white space.
+## Hack
+- `hack` to begin the hack proccess. 
+- `--prob` or `-p` to specify problem. 
+- `--number` or `-n` to specify the number of tests to try. 
 
+Exmaples: `cf hack generator.cpp checker.cpp bruteforce.cpp --prob a` <br/>
 
 ## Note
 This script uses python3
