@@ -115,7 +115,9 @@ def main():
                                         "submit -- submit code to problem\n" +
                                         "time -- shows time left in contest\n" +
                                         "watch -- watch last submission\n" +
-                                        "open -- open selected problem on default browser\n"
+                                        "open -- open selected problem on default browser\n" +
+                                        "parse -- import select problem sample tests data\n" +
+                                        "test -- test the selected source code with the imported tests data\n"
                         )
     parser.add_argument("option",
                         nargs='*', default=None,
@@ -312,7 +314,7 @@ def main():
         if not os.path.isdir("files"):
             print("Please import problem testcases first by:\n\tcf parse -p a")
             return
-        if len(args.option)==0:
+        if len(args.option) == 0:
             print("Please select the source file")
             return
         cf_test.test(args.option[0], args.lang)
