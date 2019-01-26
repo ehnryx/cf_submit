@@ -6,14 +6,14 @@ from colors import colors
 
 
 def parse(contest, problem):
-    Popen(["rm", "-rf", "files"]).wait()
     Popen(["mkdir", "-p", "files"]).wait()
+    Popen(["rm", "-rf", "files/*"]).wait()
     print("%sImporting samples of problem %s...%s" %
           (colors.WARNING, str(contest + problem), colors.ENDC))
     j = 0
     try:
         browser = RoboBrowser(parser="lxml")
-        browser.open("https://codeforces.com/problemset/problem/%s/%s"
+        browser.open("https://codeforces.com/contest/%s/problem/%s"
                      % (contest, problem))
         page = browser.parsed
         sample_test = page.find("div", class_="sample-test")
