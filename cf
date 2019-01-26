@@ -332,22 +332,27 @@ def main():
             print("Please select problem to open!!")
             return
         if len(args.prob) < 3:
-            webbrowser.open("https://codeforces.com/problemset/problem/%s/%s"
+            webbrowser.open("https://codeforces.com/contest/%s/problem/%s"
                             % (defaultcontest, str(args.prob).upper()), 2)
         else:
             splitted = re.split(r"(\D+)", args.prob)
-            webbrowser.open("https://codeforces.com/problemset/problem/%s/%s"
+            webbrowser.open("https://codeforces.com/contest/%s/problem/%s"
                             % (splitted[0], str(splitted[1]+splitted[2]).upper()), 2)
     elif args.command == "hack":
-        if len(args.option) != 3:
+        if len(args.option) < 3:
             print(
-                "Please select your <generator-source> <checker-source> <answer-source> !!")
+                "Please select your <generator-source> [<tle-generator-source>] <checker-source> <answer-source> !!")
             return
         if args.prob is None:
             print("Please select problem to try!!")
             return
-        cf_hack.begin_hack(defaultcontest, args.prob, args.option[0],
+
+        if len(args.option) == 3:
+            cf_hack.begin_hack(defaultcontest, args.prob, args.option[0], None,
                            args.option[1], args.option[2], args.number)
+        else:
+            cf_hack.begin_hack(defaultcontest, args.prob, args.option[0], args.option[1],
+                           args.option[2], args.option[3], args.number)
     else:
         print("UNKNOWN COMMAND")
 

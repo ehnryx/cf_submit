@@ -22,25 +22,59 @@ def hack(contest, hack_test, submission_id):
     browser.submit_form(hack_form)
 
 
-def begin_hack(contest, problem, generator, checker, correct_solution, test_number):
+def tle_hack(contest, hack_test, submission_id):
+    browser = cf_login.login()
+    browser.open("https://codeforces.com/contest/" +
+                 contest + "/challenge/" + str(submission_id))
+    hack_form = browser.get_form(class_="challenge-form")
+    hack_form["generatorSourceFile"] = hack_test
+    hack_form["programTypeId"] = "50"
+    browser.submit_form(hack_form)
+
+
+def comp(source):
+    info = source.split('.')
+    lang = info[-1]
+    if lang == "cpp":
+        Popen("g++ %s -O2 -o %s" % (source, info[0]), shell=True).wait()
+        Popen(["mv", info[0], "workspace"]).wait()
+    elif lang == "c":
+        Popen("gcc %s -O2 -o %s" % (source, info[0]), shell=True).wait()
+        Popen(["mv", info[0], "workspace"]).wait()
+    elif lang == "java":
+        Popen("javac %s" % (source), shell=True).wait()
+        Popen(["mv", info[0], "workspace"]).wait()
+    elif lang == "py":
+        Popen(["mv", source, "workspace"]).wait()
+
+
+def init_workspace(generator, tle_generator, checker, correct_solution):
+    print("%sInitializing workspace...%s" % (colors.OKGREEN, colors.ENDC))
+    Popen(["mkdir", "-p", "workspace"]).wait()
+    Popen(["rm", "-rf", "workspace/*"]).wait()
+    comp(generator)
+    comp(checker)
+    comp(correct_solution)
+    if tle_generator is not None:
+        comp(tle_generator)
+    print("%sWorkspace is ready!!%s" % (colors.OKGREEN, colors.ENDC))
+
+
+def begin_hack(contest, problem, generator, tle_generator, checker, correct_solution, test_number):
     global file_name
     hacked_solutions = 0
     tried_solutions = 0
 
     # Preparing Workspace
-    init_workspace_process = Popen(
-        ["/bin/bash", os.path.join(os.path.dirname(__file__), "init_workspace.sh"), generator,
-         checker, correct_solution])
+    init_workspace(generator, tle_generator, checker, correct_solution)
     tried_submissions_list = open(os.path.join(
         os.path.dirname(__file__), "tried_submissions"), "r")
-
     list_str = tried_submissions_list.read().strip()
     tried_submissions = list()
     if list_str != "":
         tried_submissions = list(map(int, list_str.split(' ')))
     tried_submissions_list = open(os.path.join(
         os.path.dirname(__file__), "tried_submissions"), "a")
-    init_workspace_process.wait()
 
     browser = RoboBrowser(parser="lxml")
     browser.open("https://codeforces.com/contest/" +
@@ -82,13 +116,14 @@ def begin_hack(contest, problem, generator, checker, correct_solution, test_numb
                              colors.OKBLUE, tried_solutions, colors.ENDC))
                     print("%sTrying to hack a %s solution - %d on page %d/%d...%s"
                           % (colors.HEADER, language, submission_id, i, max_pages, colors.ENDC))
-
+                    print("%sNormal hack process%s" %
+                          (colors.WARNING, colors.ENDC))
                     hack_process = Popen(
-                        ["timeout", "120", os.path.join(os.path.dirname(__file__), "hack_prob.sh"),
+                        [os.path.join(os.path.dirname(__file__), "hack_prob.sh"),
                          generator, checker, correct_solution, file_name, language.replace(" ", ""), str(test_number)])
-                    hack_process.wait()
+                    hack_process.wait(timeout=10)
                     exit_code = hack_process.returncode
-                    if exit_code in [0, 255]:
+                    if exit_code in [0, 127, 255]:
                         print("%sSorry, can't hack this solution x/" %
                               (colors.FAIL))
                     else:
@@ -99,6 +134,27 @@ def begin_hack(contest, problem, generator, checker, correct_solution, test_numb
                                   (colors.OKGREEN, colors.ENDC))
                             hacked_solutions = hacked_solutions + 1
                             hack(contest, test_hack_loc, submission_id)
+                            continue
+                    if tle_generator is not None:
+                        print("%sTLE hack process%s" %
+                              (colors.WARNING, colors.ENDC))
+                        hack_process = Popen(
+                            [os.path.join(os.path.dirname(__file__), "hack_prob.sh"),
+                             tle_generator, checker, correct_solution, file_name, language.replace(" ", ""), str(test_number)])
+                        hack_process.wait(timeout=10)
+                        exit_code = hack_process.returncode
+                        if exit_code in [0, 127, 255]:
+                            print("%sSorry, can't hack this solution x/" %
+                                  (colors.FAIL))
+                        else:
+                            hack_source_loc = os.path.join(
+                                dir_path, "hack.cpp")
+                            if os.path.isfile(hack_source_loc):
+                                print("%sHope that will win 3:)%s" %
+                                      (colors.OKGREEN, colors.ENDC))
+                                hacked_solutions = hacked_solutions + 1
+                                tle_hack(contest, hack_source_loc,
+                                         submission_id)
         except KeyboardInterrupt:
             time.sleep(2)
             break
