@@ -69,8 +69,8 @@ def execute(source, lang, info, input_file, output_file):
 
 def comp(source, lang, info):
     if lang == "cpp":
-        Popen("g++ %s -o %s" % (source, info[0]), shell=True).wait()
+        Popen("g++ %s -O2 -o %s" % (source, info[0]), shell=True).wait()
     elif lang == "c":
-        Popen("gcc %s -o %s" % (source, info[0]), shell=True).wait()
+        Popen("gcc %s -O2 -o %s" % (source, info[0]), shell=True).wait()
     elif lang == "java":
         Popen("javac %s" % (source), shell=True).wait()
