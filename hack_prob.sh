@@ -27,17 +27,16 @@ cd ${WORKSPACE_DIR}
 
 compile() {
     if [[ $1 == *.cpp ]]; then
-        g++ ${1} -DONLINE_JUDGE -o ${1/.*}
+        g++ ${1} -DONLINE_JUDGE -O2 -o ${1/.*}
     elif [[ $1 == *.c ]]; then
         echo "${2} c"
-        gcc ${1} -DONLINE_JUDGE -o ${1/.*}
+        gcc ${1} -DONLINE_JUDGE -O2 -o ${1/.*}
     elif [[ $1 == *.java ]]; then
         echo "${2} java"
         javac $1
     elif [[ $1 == *.py ]]; then
         echo "${2} python"
     else
-        echo "not supported"
         clean
         exit -1
     fi
@@ -74,7 +73,6 @@ execute() {
             ${exec} $1 ${@:2}
         fi
     else
-        echo "not supported"
         clean
         exit -1
     fi
@@ -96,19 +94,13 @@ for i in test*.in; do
         if [[ ${EXIT_CODE} -ne 0 ]]; then
             printf "${YELLOW}"
             echo "error ${EXIT_CODE}"
-            cat ${i} > ${FAILED_TEST}
-	        echo -en "\007"
             clean
-            if [[ ${i} == "test0.in" ]]; then
-                exit -1
-            fi
-            exit 1
+            exit -1
         fi
         execute ${CORRECT_SOURCE} ${i} ${i/.in/.ans} &> /dev/null
         execute ${CHECKER} ${i} ${i/.in/.out} ${i/.in/.ans}
         EXIT_CODE=$?
         if [[ ${EXIT_CODE} -ne 0 ]]; then
-            printf "${GREEN}"
             cat ${i} > ${FAILED_TEST}
 	        echo -en "\007"
             clean
