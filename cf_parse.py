@@ -29,7 +29,7 @@ def parse(contest, problem):
             create_file(str(output_text.text).strip(), "test%d.ans" % (j))
             j += 1
     except Exception:
-        print("%sPlease check you internet connection !!%s" %
+        print("%sError, try in few minutes!!%s" %
               (colors.FAIL, colors.ENDC))
         return
     print("%s%d samples imported successfully!%s" %
