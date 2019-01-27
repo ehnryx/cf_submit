@@ -22,12 +22,12 @@ def hack(contest, hack_test, submission_id):
     browser.submit_form(hack_form)
 
 
-def tle_hack(contest, hack_test, submission_id):
+def tle_hack(contest, heck_generator, submission_id):
     browser = cf_login.login()
     browser.open("https://codeforces.com/contest/" +
                  contest + "/challenge/" + str(submission_id))
     hack_form = browser.get_form(class_="challenge-form")
-    hack_form["generatorSourceFile"] = hack_test
+    hack_form["generatorSourceFile"] = heck_generator
     hack_form["programTypeId"] = "50"
     browser.submit_form(hack_form)
 
@@ -36,10 +36,12 @@ def comp(source):
     info = source.split('.')
     lang = info[-1]
     if lang == "cpp":
-        Popen("g++ %s -O2 -o %s" % (source, info[0]), shell=True).wait()
+        Popen("g++ %s -DLOCAL -O2 -o %s" %
+              (source, info[0]), shell=True).wait()
         Popen(["mv", info[0], "workspace"]).wait()
     elif lang == "c":
-        Popen("gcc %s -O2 -o %s" % (source, info[0]), shell=True).wait()
+        Popen("gcc %s -DLOCAL -O2 -o %s" %
+              (source, info[0]), shell=True).wait()
         Popen(["mv", info[0], "workspace"]).wait()
     elif lang == "java":
         Popen("javac %s" % (source), shell=True).wait()
@@ -50,12 +52,13 @@ def comp(source):
 
 def init_workspace(generator, tle_generator, checker, correct_solution):
     print("%sInitializing workspace...%s" % (colors.OKGREEN, colors.ENDC))
+    Popen(["rm", "-rf", "workspace"]).wait()
     Popen(["mkdir", "-p", "workspace"]).wait()
-    Popen(["rm", "-rf", "workspace/*"]).wait()
     comp(generator)
     comp(checker)
     comp(correct_solution)
     if tle_generator is not None:
+        Popen(["cp", tle_generator, "workspace"]).wait()
         comp(tle_generator)
     print("%sWorkspace is ready!!%s" % (colors.OKGREEN, colors.ENDC))
 
@@ -67,14 +70,13 @@ def begin_hack(contest, problem, generator, tle_generator, checker, correct_solu
 
     # Preparing Workspace
     init_workspace(generator, tle_generator, checker, correct_solution)
-    tried_submissions_list = open(os.path.join(
-        os.path.dirname(__file__), "tried_submissions"), "r")
+    Popen(["touch", "tried_submissions"]).wait()
+    tried_submissions_list = open("tried_submissions", "r")
     list_str = tried_submissions_list.read().strip()
     tried_submissions = list()
     if list_str != "":
         tried_submissions = list(map(int, list_str.split(' ')))
-    tried_submissions_list = open(os.path.join(
-        os.path.dirname(__file__), "tried_submissions"), "a")
+    tried_submissions_list = open("tried_submissions", "a")
 
     browser = RoboBrowser(parser="lxml")
     browser.open("https://codeforces.com/contest/" +
@@ -148,7 +150,7 @@ def begin_hack(contest, problem, generator, tle_generator, checker, correct_solu
                                   (colors.FAIL))
                         else:
                             hack_source_loc = os.path.join(
-                                dir_path, "hack.cpp")
+                                dir_path, "workspace", tle_generator)
                             if os.path.isfile(hack_source_loc):
                                 print("%sHope that will win 3:)%s" %
                                       (colors.OKGREEN, colors.ENDC))

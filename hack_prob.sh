@@ -53,7 +53,7 @@ execute() {
         fi
     elif [[ $1 == *.java ]]; then
         if [[ $# -eq 2 ]]; then
-            java -Xmx512M -Xss64M -DONLINE_JUDGE=true -Duser.language=en -Duser.region=US -Duser.variant=US ${1/.*} $2
+            java -Xmx512M -Xss64M -DONLINE_JUDGE=true -DLOCAL=true -Duser.language=en -Duser.region=US -Duser.variant=US ${1/.*} $2
         elif [[ $# -eq 3 ]]; then
             java -Xmx512M -Xss64M -DONLINE_JUDGE=true -Duser.language=en -Duser.region=US -Duser.variant=US ${1/.*} < $2 > $3
         else
@@ -102,6 +102,9 @@ for i in test*.in; do
         EXIT_CODE=$?
         if [[ ${EXIT_CODE} -ne 0 ]]; then
             cat ${i} > ${FAILED_TEST}
+            # if [[ ${i} == "test0.in" ]]; then
+            #     exit -1
+            # fi
 	        echo -en "\007"
             clean
             exit ${EXIT_CODE}
