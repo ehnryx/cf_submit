@@ -11,11 +11,10 @@ int main(int argc, char* argv[]) {
     for (int i = 0; i < test_numbers; i++) {
         string file_name = "test" + to_string(i) + ".in";
         freopen(file_name.c_str(), "w", stdout);
-
         ////////////////////////////////
         //////// Your code here ////////
         ////////////////////////////////
-        }
+    }
 
     return 0;
 }
