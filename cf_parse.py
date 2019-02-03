@@ -5,7 +5,7 @@ from robobrowser import RoboBrowser
 from colors import colors
 
 
-def parse(contest, problem):
+def parse(group, contest, problem):
     Popen(["mkdir", "-p", "files"]).wait()
     Popen(["rm", "-rf", "files/*"]).wait()
     print("%sImporting samples of problem %s...%s" %
@@ -13,8 +13,12 @@ def parse(contest, problem):
     j = 0
     try:
         browser = RoboBrowser(parser="lxml")
-        browser.open("https://codeforces.com/contest/%s/problem/%s"
-                     % (contest, problem))
+        if group is None:
+            browser.open("https://codeforces.com/contest/%s/problem/%s"
+                         % (contest, problem))
+        else:
+            browser.open("https://codeforces.com/group/%s/contest/%s/problem/%s"
+                         % (group, contest, problem))
         page = browser.parsed
         sample_test = page.find("div", class_="sample-test")
         inputs = sample_test.find_all("div", class_="input")

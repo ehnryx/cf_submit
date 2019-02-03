@@ -323,21 +323,32 @@ def main():
             print("Please select problem to parse!!")
             return
         if len(args.prob) < 3:
-            cf_parse.parse(defaultcontest, str(args.prob).upper())
+            cf_parse.parse(defaultgroup, defaultcontest,
+                           str(args.prob).upper())
         else:
             splitted = re.split(r"(\D+)", args.prob)
-            cf_parse.parse(splitted[0], str(splitted[1]+splitted[2]).upper())
+            cf_parse.parse(defaultgroup, splitted[0], str(
+                splitted[1]+splitted[2]).upper())
     elif args.command == "open":
         if args.prob is None:
             print("Please select problem to open!!")
             return
-        if len(args.prob) < 3:
-            webbrowser.open("https://codeforces.com/contest/%s/problem/%s"
-                            % (defaultcontest, str(args.prob).upper()), 2)
+        if defaultgroup is None:
+            if len(args.prob) < 3:
+                webbrowser.open("https://codeforces.com/contest/%s/problem/%s"
+                                % (defaultcontest, str(args.prob).upper()), 2)
+            else:
+                splitted = re.split(r"(\D+)", args.prob)
+                webbrowser.open("https://codeforces.com/contest/%s/problem/%s"
+                                % (splitted[0], str(splitted[1]+splitted[2]).upper()), 2)
         else:
-            splitted = re.split(r"(\D+)", args.prob)
-            webbrowser.open("https://codeforces.com/contest/%s/problem/%s"
-                            % (splitted[0], str(splitted[1]+splitted[2]).upper()), 2)
+            if len(args.prob) < 3:
+                webbrowser.open("https://codeforces.com/group/%s/contest/%s/problem/%s"
+                                % (defaultgroup, defaultcontest, str(args.prob).upper()), 2)
+            else:
+                splitted = re.split(r"(\D+)", args.prob)
+                webbrowser.open("https://codeforces.com/group/%s/contest/%s/problem/%s"
+                                % (defaultgroup, splitted[0], str(splitted[1]+splitted[2]).upper()), 2)
     elif args.command == "hack":
         if len(args.option) < 3:
             print(
@@ -349,10 +360,10 @@ def main():
 
         if len(args.option) == 3:
             cf_hack.begin_hack(defaultcontest, args.prob, args.option[0], None,
-                           args.option[1], args.option[2], args.number)
+                               args.option[1], args.option[2], args.number)
         else:
             cf_hack.begin_hack(defaultcontest, args.prob, args.option[0], args.option[1],
-                           args.option[2], args.option[3], args.number)
+                               args.option[2], args.option[3], args.number)
     else:
         print("UNKNOWN COMMAND")
 
