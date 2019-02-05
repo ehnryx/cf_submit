@@ -8,7 +8,7 @@ After being able to submit from the command line, I noticed that I was wasting t
 Then I realized I would rather not navigate codeforces in my browser because looking for my mouse is a hassle, so now I can look at the number of solves for each problem in the terminal as well.
 
 # NEW
-Add autocomplete while writing the command (double <TAB>).
+Add autocomplete while writing the command (double TAB).
 
 # Warning
 The handle and password are stored.
