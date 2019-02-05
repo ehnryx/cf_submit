@@ -110,7 +110,7 @@ def main():
                                         "info -- current handle and contest id\n" +
                                         "login -- save login info\n" +
                                         "peek -- look at last submission\n" +
-                                        "problems -- show number of solves on each problem\n"
+                                        "problems -- show number of solves on each problem\n" +
                                         "standings -- show standings of friends in default contest, or specify contest with -p\n" +
                                         "submit -- submit code to problem\n" +
                                         "time -- shows time left in contest\n" +
