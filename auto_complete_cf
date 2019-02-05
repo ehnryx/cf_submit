@@ -1,7 +1,7 @@
 #!/bin/bash
 
 _commands(){
-  echo "con gym gcon hack ext ext info login peek problems standings submit time watch open parse test commands options"
+  echo "con gym gcon hack ext ext info login peek problems standings submit time watch open parse test"
 }
 
 _options(){
