@@ -1,0 +1,28 @@
+#!/bin/bash
+
+_commands(){
+  echo "con gym gcon hack ext ext info login peek problems standings submit time watch open parse test commands options"
+}
+
+_options(){
+  echo "-h -p -l -c -w -v -a -t -s -g -n --help --prob --lang --contest --group --watch --verbose --all --top --sort --guru --number"
+}
+
+_cf() {
+  
+  local cur prev
+  COMPREPLY=()
+  cur="${COMP_WORDS[COMP_CWORD]}"
+  
+  if [[ $cur == -* ]]; then
+    _script_commands=$(_options)
+  else 
+    _script_commands=$(_commands)
+  fi
+
+  COMPREPLY=( $(compgen -W "${_script_commands}" -- ${cur}) )
+
+  return 0
+}
+
+complete -F _cf cf

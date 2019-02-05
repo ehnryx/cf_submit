@@ -8,10 +8,7 @@ After being able to submit from the command line, I noticed that I was wasting t
 Then I realized I would rather not navigate codeforces in my browser because looking for my mouse is a hassle, so now I can look at the number of solves for each problem in the terminal as well.
 
 # NEW
-Now you can parse all the problem samples and then test your code source by command line.
-Examples: 
-- `cf parse -p 1108a` or `cf parse -p a` <br />
-- `cf test main.cpp`, you should specify the version for python (use `-l py2|py3`) <br />
+Add autocomplete while writing the command (double <TAB>).
 
 # Warning
 The handle and password are stored.
@@ -21,6 +18,7 @@ The handle and password are stored.
 1. cd into the cloned repository. `cd cf_submit`
 1. Make the python script `cf` executable. `chmod +x cf`
 1. Edit `.bashrc` and add `cf_submit` to the `PATH`.
+1. Add `source (install_dir)/cf_submit/auto_complete_cf` to `.bashrc`.
 
 # Dependencies
 robobrowser https://pypi.python.org/pypi/robobrowser <br />
@@ -42,6 +40,16 @@ prettytable https://pypi.python.org/pypi/PrettyTable <br />
 - `open` to open the selected problem in the browser
 
 Examples: `cf submit code.cpp -p844a -w` <br />
+
+## Parse problem samples
+- `parse` to import selected problem samples data
+
+Examples: `cf parse -p 1108a` or `cf parse -p a` <br />
+
+## Test solution
+- `test` to test the selected source code with the imported tests data
+
+Examples: `cf test main.cpp`, you should specify the version for python (use `-l py2|py3`) <br />
 
 ## Print Standings
 - `standings` or `st` to look at friends' standings. Example: `cf standings`
