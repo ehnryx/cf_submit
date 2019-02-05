@@ -116,7 +116,7 @@ def main():
                                         "time -- shows time left in contest\n" +
                                         "watch -- watch last submission\n" +
                                         "open -- open selected problem on default browser\n" +
-                                        "parse -- import select problem sample tests data\n" +
+                                        "parse -- import selected problem samples data\n" +
                                         "test -- test the selected source code with the imported tests data\n"
                         )
     parser.add_argument("option",
