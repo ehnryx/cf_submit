@@ -10,9 +10,6 @@ Then I realized I would rather not navigate codeforces in my browser because loo
 # NEW
 Add autocomplete while writing the command (double TAB).
 
-# Warning
-The handle and password are stored.
-
 # Setup (Linux)
 - Install from pip. `sudo pip install cf_submit`
 
