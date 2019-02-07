@@ -1,4 +1,0 @@
-lxml
-robobrowser
-prettytable
-javalang

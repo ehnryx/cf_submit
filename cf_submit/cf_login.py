@@ -4,6 +4,7 @@ import getpass
 from robobrowser import RoboBrowser
 
 root = '7'
+cache_loc = os.path.join(os.environ['HOME'], '.cache', 'cf_submit')
 
 
 # converter
@@ -45,7 +46,7 @@ def encode(s):
 def get_secret(inclupass):
     handle = None
     password = None
-    secret_loc = os.path.join(os.path.dirname(__file__), "secret")
+    secret_loc = os.path.join(cache_loc, "secret")
     if os.path.isfile(secret_loc):
         secretfile = open(secret_loc, "r")
         rawdata = secretfile.read().rstrip('\n').split()
@@ -79,7 +80,7 @@ def set_login(handle=None):
         print("Login Failed.")
         return
     else:
-        secret_loc = os.path.join(os.path.dirname(__file__), "secret")
+        secret_loc = os.path.join(cache_loc, "secret")
         secretfile = open(secret_loc, "w")
         secretfile.write(encode(handle) + " " + encode(password))
         secretfile.close()

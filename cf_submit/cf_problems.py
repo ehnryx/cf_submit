@@ -1,6 +1,6 @@
 from prettytable import PrettyTable
 
-from colors import colors
+from .cf_colors import colors
 
 
 def print_prob(raw_html, contest, verbose, sort):

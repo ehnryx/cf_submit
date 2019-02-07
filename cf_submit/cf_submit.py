@@ -3,10 +3,11 @@ import time
 import json
 import re
 import requests
-from colors import colors
 
+from .cf_colors import colors
 
 # submissions
+
 
 def get_submission_data(handle):
     req = requests.get(

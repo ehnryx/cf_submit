@@ -13,11 +13,16 @@ _cf() {
   local cur prev
   COMPREPLY=()
   cur="${COMP_WORDS[COMP_CWORD]}"
-  
+  _script_commands=""
+
   if [[ $cur == -* ]]; then
     _script_commands=$(_options)
   else 
     _script_commands=$(_commands)
+  fi
+
+  if [[ $_script_commands != *$cur* || $cur == "" ]]; then
+    _script_commands=$(ls)
   fi
 
   COMPREPLY=( $(compgen -W "${_script_commands}" -- ${cur}) )

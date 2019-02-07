@@ -1,7 +1,7 @@
 import re
 from prettytable import PrettyTable
 
-from colors import colors
+from .cf_colors import colors
 
 
 def makeascii(s):

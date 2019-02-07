@@ -2,7 +2,7 @@ import os
 from subprocess import Popen
 from robobrowser import RoboBrowser
 
-from colors import colors
+from .cf_colors import colors
 
 
 def parse(group, contest, problem):

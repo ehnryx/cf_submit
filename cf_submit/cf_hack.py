@@ -5,8 +5,8 @@ import javalang
 from subprocess import Popen
 from robobrowser import RoboBrowser
 
-import cf_login
-from colors import colors
+from . import cf_login
+from .cf_colors import colors
 
 dir_path = os.getcwd()
 

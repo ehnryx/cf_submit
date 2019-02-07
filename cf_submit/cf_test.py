@@ -2,7 +2,7 @@ import os
 import glob
 from subprocess import Popen
 
-from colors import colors
+from .cf_colors import colors
 
 
 def test(source, lang):
