@@ -6,8 +6,8 @@ from colors import colors
 
 
 def parse(group, contest, problem):
+    Popen(["rm", "-rf", "files"]).wait()
     Popen(["mkdir", "-p", "files"]).wait()
-    Popen(["rm", "-rf", "files/*"]).wait()
     print("%sImporting samples of problem %s...%s" %
           (colors.WARNING, str(contest + problem), colors.ENDC))
     j = 0
