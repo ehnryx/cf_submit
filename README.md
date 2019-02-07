@@ -14,12 +14,7 @@ Add autocomplete while writing the command (double TAB).
 The handle and password are stored.
 
 # Setup (Linux)
-1. Clone the repository. `git clone https://github.com/ehnryx/cf_submit.git`
-1. cd into the cloned repository. `cd cf_submit`
-1. Make the python script `cf` executable. `chmod +x cf`
-1. Install dependencies `pip install -r requirements.txt`
-1. Edit `.bashrc` and add `cf_submit` to the `PATH`.
-1. Add `source (install_dir)/cf_submit/auto_complete_cf` to `.bashrc`.
+- Install from pip. `sudo pip install cf_submit`
 
 # Uses
 ## Submissions
