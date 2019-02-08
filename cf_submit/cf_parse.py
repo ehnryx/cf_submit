@@ -24,13 +24,17 @@ def parse(group, contest, problem):
         inputs = sample_test.find_all("div", class_="input")
         for i in inputs:
             input_text = i.find("pre")
-            create_file(str(input_text.text).strip(), "test%d.in" % (j))
+            input_text = str(input_text).replace(
+                '<br/>', '\n').replace('<pre>', '').replace('</pre>', '')
+            create_file(input_text.strip(), "test%d.in" % (j))
             j += 1
         outputs = sample_test.find_all("div", class_="output")
         j = 0
         for i in outputs:
             output_text = i.find("pre")
-            create_file(str(output_text.text).strip(), "test%d.ans" % (j))
+            output_text = str(output_text).replace(
+                '<br/>', '\n').replace('<pre>', '').replace('</pre>', '')
+            create_file(output_text.strip(), "test%d.ans" % (j))
             j += 1
     except Exception:
         print("%sError, try in few minutes!!%s" %
