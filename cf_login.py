@@ -60,7 +60,7 @@ def set_login(handle=None):
 	password = getpass.getpass("Password: ")
 
 	browser = RoboBrowser(parser = "lxml")
-	browser.open("http://codeforces.com/enter")
+	browser.open("https://codeforces.com/enter")
 	enter_form = browser.get_form("enterForm")
 	enter_form["handleOrEmail"] = handle
 	enter_form["password"] = password
