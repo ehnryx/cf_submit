@@ -12,6 +12,8 @@ def get_submission_data(handle):
     js = json.loads(content)
     if "status" not in js or js["status"] != "OK":
         print("Connection Error!")
+    if "result" not in js:
+        return "?", "?", "?", "?", "?", "?"
     res = js["result"][0]
     # check if verdict exists (in queue if not)
     if "verdict" not in res:
@@ -21,6 +23,10 @@ def get_submission_data(handle):
 """ look at last submission """
 def peek(handle):
     id_, probject, verdict, passedTests, timeCon, memCon = get_submission_data(handle)
+    if id_ == "?":
+        sys.stdout.write("\r" + "some error occurred")
+        sys.stdout.flush()
+        return
     problem = str(probject["contestId"])+str(probject["index"])
     if verdict == "TESTING":
         print("submission "+str(id_) + " to problem "+problem + ": "+verdict)
@@ -36,6 +42,10 @@ def watch(handle):
     count = 0
     while True:
         id_, probject, verdict, passedTests, timeCon, memCon = get_submission_data(handle)
+        if id_ == "?":
+            sys.stdout.write("\r" + "some error occurred")
+            sys.stdout.flush()
+            continue
         problem = str(probject["contestId"])+str(probject["index"])
         if verdict != "TESTING" and verdict != "IN QUEUE":
             if verdict != "OK": 
@@ -64,10 +74,15 @@ def submit_problem(browser, contest, lang, source):
     submission["sourceFile"] = source
     langcode = None
     if lang == "cpp":
+        # GNU G++17 7.3.0
+        langcode = "54"
         # GNU G++14 6.2.0
-        langcode = "50"
+        # langcode = "50"
         # GNU G++11 5.1.0
         # langcode = "42"
+    #elif lang == "c++17":
+        # GNU G++17 7.3.0
+        # langcode = "54"
     elif lang == "c":
         # GNU GCC C11 5.1.0
         langcode = "43"
@@ -77,8 +92,8 @@ def submit_problem(browser, contest, lang, source):
         # python 2.7
         # langcode = "7"
         # python 3.6
-        langcode = "31"
-    elif lang == "pypy":
+        #langcode = "31"
+    #elif lang == "pypy":
         # pypy 3.5
         langcode = "41"
     elif lang == "rb":
@@ -93,6 +108,8 @@ def submit_problem(browser, contest, lang, source):
         langcode = "49"
     elif lang == "php":
         langcode = "6"
+    elif lang == "go":
+        langcode = "32"
     else: 
         print("Unknown Language")
         return False
