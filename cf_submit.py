@@ -66,8 +66,10 @@ def submit_problem(browser, contest, lang, source, guru):
     submission["sourceFile"] = source
     langcode = None
     if lang == "cpp":
+        # GNU G++17 9.2.0 (64 bit, msys 2)
+        langcode = "61"
         # GNU G++14 6.2.0
-        langcode = "50"
+        # langcode = "50"
         # GNU G++11 5.1.0
         # langcode = "42"
     elif lang == "c":
