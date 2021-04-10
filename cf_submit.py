@@ -74,8 +74,10 @@ def submit_problem(browser, contest, lang, source):
     submission["sourceFile"] = source
     langcode = None
     if lang == "cpp":
+        # GNU G++17 9.2.0 (64 bit)
+        langcode = "61"
         # GNU G++17 7.3.0
-        langcode = "54"
+        # langcode = "54"
         # GNU G++14 6.2.0
         # langcode = "50"
         # GNU G++11 5.1.0
@@ -99,9 +101,11 @@ def submit_problem(browser, contest, lang, source):
     elif lang == "rb":
         # Ruby 2.0.0p645
         langcode = "8"
-    elif lang == "java": 
+    elif lang == "java":
         # Java 1.8.0_112
-        langcode = "36"
+        # langcode = "36"
+        # Java 11.0.6
+        langcode = "60"
     elif lang == "scala":
         langcode = "20"
     elif lang == "rs":
@@ -110,13 +114,17 @@ def submit_problem(browser, contest, lang, source):
         langcode = "6"
     elif lang == "go":
         langcode = "32"
-    else: 
+    elif lang == "text":
+        langcode = "57"
+    elif lang == "kt":
+        langcode = "48"
+    else:
         print("Unknown Language")
         return False
     submission["programTypeId"] = langcode
 
     browser.submit_form(submission)
-    
+
     """ check if good """
     if browser.url[-3:] != "/my":
         print("Failed to submit code")

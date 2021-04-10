@@ -136,7 +136,7 @@ def main():
             help="sort by: solves (default), index (id)"
     )
     parser.add_argument("-g", "--group",
-            action="store_true", default=None,
+            type=str, action="store", nargs='?', default=None,
             help="specify group, example: -g L0zlhp0AHw"
     )
 
@@ -152,7 +152,7 @@ def main():
         args.sort = "index"
 
     """ do stuff """
-    if args.group is not None:
+    if args.group is not None and len(args.group) < 7:
         args.group = "L0zlhp0AHw"
 
     if args.command == "gym" or args.command == "con":

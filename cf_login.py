@@ -66,7 +66,7 @@ def set_login(handle=None):
 	enter_form["password"] = password
 	browser.submit_form(enter_form)
 
-	checks = list(map(lambda x: x.getText()[1:].strip(), 
+	checks = list(map(lambda x: x.getText()[1:].strip(),
 		browser.select("div.caption.titled")))
 	if handle not in checks:
 		print("Login Failed.")
