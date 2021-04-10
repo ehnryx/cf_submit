@@ -66,32 +66,50 @@ def submit_problem(browser, contest, lang, source, guru):
     submission["sourceFile"] = source
     langcode = None
     if lang == "cpp":
+        # GNU G++17 9.2.0 (64 bit)
+        langcode = "61"
+        # GNU G++17 7.3.0
+        # langcode = "54"
         # GNU G++14 6.2.0
-        langcode = "50"
+        # langcode = "50"
         # GNU G++11 5.1.0
         # langcode = "42"
+    #elif lang == "c++17":
+        # GNU G++17 7.3.0
+        # langcode = "54"
     elif lang == "c":
         # GNU GCC C11 5.1.0
         langcode = "43"
     elif lang == "d":
         langcode = "28"
     elif lang == "py":
-        # python 2.7.12
-        #langcode = "7"
-        # python 3.5.2
-        langcode = "31"
+        # python 2.7
+        # langcode = "7"
+        # python 3.6
+        #langcode = "31"
+    #elif lang == "pypy":
+        # pypy 3.5
+        langcode = "41"
     elif lang == "rb":
         # Ruby 2.0.0p645
         langcode = "8"
-    elif lang == "java": 
+    elif lang == "java":
         # Java 1.8.0_112
-        langcode = "36"
+        # langcode = "36"
+        # Java 11.0.6
+        langcode = "60"
     elif lang == "scala":
         langcode = "20"
     elif lang == "rs":
         langcode = "49"
     elif lang == "php":
         langcode = "6"
+    elif lang == "go":
+        langcode = "32"
+    elif lang == "text":
+        langcode = "57"
+    elif lang == "kt":
+        langcode = "48"
     else: 
         print("Unknown Language")
         return False
