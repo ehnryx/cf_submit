@@ -5,7 +5,7 @@ import re
 import requests
 import colours
 
-""" submissions """ 
+""" submissions """
 def get_submission_data(handle):
     req = requests.get("http://codeforces.com/api/user.status?handle={}&from=1&count=1".format(handle))
     content = req.content.decode()
@@ -40,7 +40,7 @@ def watch(handle):
             probject["contestId"] = "guru"
         problem = str(probject["contestId"])+str(probject["index"])
         if verdict != "TESTING" and verdict != "IN QUEUE":
-            if verdict != "OK": 
+            if verdict != "OK":
                 sys.stdout.write("\r" + "submission "+str(id_) + " to problem " + problem + ": " + verdict + " on test "+str(1+passedTests) + "\n" + "Time: "+str(timeCon)+"ms \n" + "Memory: "+str(memCon/1024)+"Kb")
             else:
                 sys.stdout.write("\r" + "submission "+str(id_) + " to problem " + problem + ": " + verdict+"! passed all " + str(passedTests) + " tests\n" + "Time: "+str(timeCon)+"ms \n" + "Memory: "+str(memCon/1024)+"Kb")
@@ -66,8 +66,10 @@ def submit_problem(browser, contest, lang, source, guru):
     submission["sourceFile"] = source
     langcode = None
     if lang == "cpp":
+        # GNU G++20 11.2.0 (64 bit)
+        langcode = "73"
         # GNU G++17 9.2.0 (64 bit)
-        langcode = "61"
+        # langcode = "61"
         # GNU G++17 7.3.0
         # langcode = "54"
         # GNU G++14 6.2.0
@@ -110,7 +112,7 @@ def submit_problem(browser, contest, lang, source, guru):
         langcode = "57"
     elif lang == "kt":
         langcode = "48"
-    else: 
+    else:
         print("Unknown Language")
         return False
     submission["programTypeId"] = langcode
@@ -120,7 +122,7 @@ def submit_problem(browser, contest, lang, source, guru):
         submission["submittedProblemCode"] = guru
 
     browser.submit_form(submission)
-    
+
     """ check if good """
     if (guru != -1 and browser.url[-7:] != "/status") or (guru == -1 and browser.url[-3:] != "/my"):
         print("Failed to submit code")
@@ -132,7 +134,7 @@ def submit_problem(browser, contest, lang, source, guru):
     countdown_timer = browser.parsed.find_all("span", class_="contest-state-regular countdown before-contest-"+contest+"-finish")
     if len(countdown_timer) > 0:
         print(colours.bold() + "TIME LEFT: " + str(countdown_timer[0].get_text(strip=True)) + colours.reset())
-    
+
     return True
 
 
@@ -169,7 +171,7 @@ def submit_files(browser, defaulthandle, defaultcontest, defaultprob, defext, de
         if source.find('.') == -1:
             info.append(defext)
             source += "." + defext
-        
+
         """ check language """
         if defaultlang is not None:
             info[-1] = defaultlang
@@ -188,7 +190,7 @@ def submit_files(browser, defaulthandle, defaultcontest, defaultprob, defext, de
                 if len(splitted) == 3 and len(splitted[1]) == 1 and len(splitted[2]) == 0:
                     """ probably a good string """
                     submit(browser, defaulthandle, splitted[0], splitted[1], info[-1], source, show, guru)
-                else: 
+                else:
                     print("cannot understand the problem specified")
 
         elif len(info) == 2:
@@ -204,7 +206,7 @@ def submit_files(browser, defaulthandle, defaultcontest, defaultprob, defext, de
                 if len(info[0]) == 1:
                     """ only the letter, use default contest """
                     submit(browser, defaulthandle, defaultcontest, info[0], info[1], source, show, guru)
-                else: 
+                else:
                     """ contest is included, so parse """
                     splitted = re.split('(\D+)', info[0])
                     if len(splitted) == 3 and len(splitted[1]) == 1 and len(splitted[2]) == 0:
