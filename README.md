@@ -12,6 +12,7 @@ The handle and password are stored locally.
 
 # Setup (Linux)
 1. Clone the repository. `git clone https://github.com/ehnryx/cf_submit.git`
+1. Install the dependencies. `pip3 install robobrowser prettytable`
 1. cd into the cloned repository. `cd cf_submit`
 1. Move `cf.py` to `cf` for easy typing. `mv cf.py cf`
 1. Make the python script executable. `chmod +x cf`
